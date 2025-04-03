@@ -1,7 +1,7 @@
 import { getBlogPosts } from 'app/blog/utils'
 
 export const baseUrl = process.env.NEXT_PUBLIC_IMAGE_BASE_URL || 'https://adityamahakali.vercel.app';
-console.log('baseUrl', baseUrl)
+// console.log('baseUrl', baseUrl)
 
 export default async function sitemap() {
   let blogs = getBlogPosts().map((post) => ({
