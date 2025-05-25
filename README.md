@@ -15,7 +15,7 @@
 * 🧱 Skilled in backend (FastAPI, Spring Boot), frontend (React), and deploying full-stack AI systems
 * 📚 Researcher in RAG Techniques, Multi-Agent Collaboration, and Knowledge Graphs
 * 📫 Reach out to me at **[adityamahakali@gmail.com](mailto:adityamahakali@gmail.com)**
-* 🧠 Explore my work at [adityamahakali.dev](https://adityamahakali-koepkjomn-adityamahakalis-projects.vercel.app/)
+* 🧠 Explore my work at [adityamahakali](https://adityamahakali.vercel.app/)
 
 ---
 
@@ -87,9 +87,9 @@ IEEE — *October 23, 2024*
 
 * 📧 Email: **[adityamahakali@gmail.com](mailto:adityamahakali@gmail.com)**
 * 📍 Location: Bangalore, India
-* 🌐 Website: [adityamahakali.dev](https://adityamahakali-koepkjomn-adityamahakalis-projects.vercel.app/)
-* 📝 [Download Resume](#)
-* 💼 [Connect on LinkedIn](https://linkedin.com/in/adityamahakali)
+* 🌐 Website: [adityamahakali](https://adityamahakali.vercel.app/)
+* 📝 [Download Resume](https://rxresu.me/adityamahakali/aditya-mahakali)
+* 💼 [Connect on LinkedIn](https://www.linkedin.com/in/aditya-mahakali-b81758168/)
 
 ---
 
