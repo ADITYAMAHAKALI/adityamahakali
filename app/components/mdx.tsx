@@ -4,27 +4,32 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
 
-function Table({ data }) {
-  let headers = data.headers.map((header, index) => (
+function Table({ children }) {
+  // Parse the Markdown table data here
+  let rows = children.props.children;
+
+  let headers = rows[0].props.children.map((header, index) => (
     <th key={index}>{header}</th>
-  ))
-  let rows = data.rows.map((row, index) => (
+  ));
+
+  let tableRows = rows.slice(1).map((row, index) => (
     <tr key={index}>
-      {row.map((cell, cellIndex) => (
+      {row.props.children.map((cell, cellIndex) => (
         <td key={cellIndex}>{cell}</td>
       ))}
     </tr>
-  ))
+  ));
 
   return (
-    <table>
+    <table className="table-auto w-full">
       <thead>
         <tr>{headers}</tr>
       </thead>
-      <tbody>{rows}</tbody>
+      <tbody>{tableRows}</tbody>
     </table>
-  )
+  );
 }
+
 
 function CustomLink(props) {
   let href = props.href

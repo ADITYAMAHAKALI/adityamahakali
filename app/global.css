@@ -148,3 +148,42 @@ table {
 .title {
   text-wrap: balance;
 }
+/* General table styles */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Ensure borders collapse into a single line */
+  margin: 1rem 0; /* Add space above and below the table */
+}
+
+th, td {
+  padding: 0.75rem; /* Add padding to cells */
+  text-align: left; /* Align text to the left */
+  border: 1px solid #ddd; /* Light border color */
+}
+
+/* Add different background colors to headers */
+th {
+  background-color: #f7fafc; /* Light background for header */
+  font-weight: bold; /* Make the header text bold */
+}
+
+
+
+tr:hover {
+  background-color: #09045e; /* Hover effect for rows */
+}
+
+/* Optional: Add border radius for rounded corners */
+table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Responsive tables: Allow tables to scroll on smaller screens */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    white-space: nowrap; /* Prevent content from wrapping */
+  }
+}

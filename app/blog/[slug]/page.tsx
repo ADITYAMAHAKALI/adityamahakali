@@ -11,8 +11,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug);
+export async function generateMetadata({ params }) {
+  // Directly access the slug without awaiting
+  let slug = params.slug;
+
+  let post = getBlogPosts().find((post) => post.slug === slug);
+
   if (!post) {
     return;
   }
@@ -51,15 +55,17 @@ export function generateMetadata({ params }) {
   };
 }
 
-export default function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug);
+
+export default async function Blog({ params }) {
+  let slug =  params.slug;
+  let post = getBlogPosts().find((post) => post.slug === slug);
 
   if (!post) {
     notFound();
   }
 
   return (
-    <section>
+    <section className="max-w-7xl bg-gradient-to-r from-indigo-800 to-indigo-900 mx-auto px-4 py-6">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -82,15 +88,13 @@ export default function Blog({ params }) {
           }),
         }}
       />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
+      <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-100 tracking-tighter mb-4">
         {post.metadata.title}
       </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
+      <div className="flex justify-between items-center mt-2 mb-8 text-sm text-neutral-600 dark:text-neutral-400">
+        <p>{formatDate(post.metadata.publishedAt)}</p>
       </div>
-      <article className="prose">
+      <article className="prose prose-lg dark:prose-dark text-neutral-900 dark:text-neutral-100">
         <CustomMDX source={post.content} />
       </article>
     </section>

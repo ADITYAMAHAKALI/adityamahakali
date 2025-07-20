@@ -5,7 +5,7 @@ export function BlogPosts() {
   let allBlogs = getBlogPosts();
 
   return (
-    <div>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {allBlogs
         .sort((a, b) => {
           if (
@@ -18,16 +18,23 @@ export function BlogPosts() {
         .map((post) => (
           <Link
             key={post.slug}
-            className="flex flex-col space-y-1 mb-4"
+            className="flex flex-col bg-white dark:bg-neutral-800 rounded-lg shadow-md overflow-hidden"
             href={`/blog/${post.slug}`}
           >
-            <div className="w-full flex flex-col md:flex-row space-x-0 md:space-x-2">
-              <p className="text-neutral-600 dark:text-neutral-400 w-[100px] tabular-nums">
+            <div className="relative w-full h-48">
+              <img
+                src={post.metadata.image || "/path/to/placeholder-image.jpg"} // Replace with a real image or a placeholder
+                alt={post.metadata.title}
+                className="object-cover w-full h-full"
+              />
+            </div>
+            <div className="p-4">
+              <p className="text-neutral-600 dark:text-neutral-400 text-sm">
                 {formatDate(post.metadata.publishedAt, false)}
               </p>
-              <p className="text-neutral-900 dark:text-neutral-100 tracking-tight">
+              <h3 className="text-neutral-900 dark:text-neutral-100 text-lg font-semibold tracking-tight mt-2">
                 {post.metadata.title}
-              </p>
+              </h3>
             </div>
           </Link>
         ))}
