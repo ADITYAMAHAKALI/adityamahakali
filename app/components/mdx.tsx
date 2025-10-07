@@ -2,8 +2,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { highlight } from 'sugar-high';
 import React from 'react';
-import MermaidClient from './MermaidClient';
-
+import { MDXRemote, type MDXRemoteSerializeResult } from 'next-mdx-remote';
+// import MermaidClient from './MermaidClient';
 function Table({ children }) {
   let rows = children.props.children;
 
@@ -100,5 +100,14 @@ export const mdxComponents = {
   a: CustomLink,
   code: Code,
   Table,
-  mermaid: MermaidClient,
+  // mermaid: MermaidClient, // Using the dynamically imported Mermaid component here
 };
+
+export function CustomMDX(props) {
+  return (
+    <MDXRemote
+      {...props}
+      components={{ ...components, ...(props.components || {}) }}
+    />
+  );
+}
