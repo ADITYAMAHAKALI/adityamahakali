@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { CustomMDX } from "app/components/mdx";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { mdxComponents } from "app/components/mdx";
 import { formatDate, getBlogPosts } from "app/blog/utils";
 import { baseUrl } from "app/sitemap";
 
@@ -95,7 +96,7 @@ export default async function Blog({ params }) {
         <p>{formatDate(post.metadata.publishedAt)}</p>
       </div>
       <article className="prose prose-lg dark:prose-dark text-neutral-900 dark:text-neutral-100">
-        <CustomMDX source={post.content} />
+        <MDXRemote source={post.content} components={mdxComponents} />
       </article>
     </section>
   );
