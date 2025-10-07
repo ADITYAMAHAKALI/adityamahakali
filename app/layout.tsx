@@ -1,4 +1,4 @@
-import "./global.css";
+import './global.css';
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/images/pp.jpeg", // Replace with your actual profile image URL
+        url: "/images/dp.jpeg", // Replace with your actual profile image URL
         width: 800,
         height: 800,
         alt: "Aditya Mahakali Profile",

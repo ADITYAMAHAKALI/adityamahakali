@@ -1,0 +1,5 @@
+// types/react-mermaid2.d.ts
+declare module 'react-mermaid2' {
+  const Mermaid: React.ComponentType<any>;
+  export default Mermaid;
+}

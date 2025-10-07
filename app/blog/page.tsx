@@ -1,7 +1,7 @@
 import { BlogPosts } from "app/components/posts";
 import Link from "next/link";
 import Image from "next/image";
-import pp from "../images/pp.jpeg";
+import pp from "../images/dp.jpeg";
 export const metadata = {
   title: "Blog",
   description: "Read my blog.",

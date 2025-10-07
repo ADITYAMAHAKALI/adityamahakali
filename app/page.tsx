@@ -8,7 +8,7 @@ import {
 } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import Image from "next/image";
-import pp from "./images/pp.jpeg";
+import pp from "./images/dp.jpeg";
 
 export default function Page() {
   return (
