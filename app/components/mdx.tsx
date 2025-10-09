@@ -3,18 +3,22 @@ import Image from 'next/image';
 
 import { tokenize } from 'sugar-high';
 import React from 'react';
-import { MDXRemote, type MDXRemoteSerializeResult } from 'next-mdx-remote';
-// import MermaidClient from './MermaidClient';
-function Table({ children }) {
-  let rows = children.props.children;
+import { MDXRemote } from 'next-mdx-remote/rsc';
 
-  let headers = rows[0].props.children.map((header, index) => (
+function Table({ children }: { children: any }) {
+  const rows = children?.props?.children ?? [];
+
+  if (!Array.isArray(rows) || rows.length === 0) {
+    return children;
+  }
+
+  const headers = (rows[0]?.props?.children ?? []).map((header: React.ReactNode, index: number) => (
     <th key={index}>{header}</th>
   ));
 
-  let tableRows = rows.slice(1).map((row, index) => (
-    <tr key={index}>
-      {row.props.children.map((cell, cellIndex) => (
+  const tableRows = rows.slice(1).map((row: any, rowIndex: number) => (
+    <tr key={rowIndex}>
+      {(row?.props?.children ?? []).map((cell: React.ReactNode, cellIndex: number) => (
         <td key={cellIndex}>{cell}</td>
       ))}
     </tr>
@@ -30,8 +34,8 @@ function Table({ children }) {
   );
 }
 
-function CustomLink(props) {
-  let href = props.href;
+function CustomLink(props: React.AnchorHTMLAttributes<HTMLAnchorElement>) {
+  const href = props.href ?? '';
 
   if (href.startsWith('/')) {
     return (
@@ -48,8 +52,9 @@ function CustomLink(props) {
   return <a target="_blank" rel="noopener noreferrer" {...props} />;
 }
 
-function RoundedImage(props) {
-  return <Image alt={props.alt} className="rounded-lg" {...props} />;
+function RoundedImage({ alt, className, ...rest }: React.ComponentProps<typeof Image>) {
+  const composedClassName = className ? `rounded-lg ${className}` : 'rounded-lg';
+  return <Image alt={alt ?? ''} className={composedClassName} {...rest} />;
 }
 
 const TOKEN_TYPES = [
@@ -144,9 +149,8 @@ function Code({ children, ...props }) {
   return <code {...props}>{highlighted}</code>;
 }
 
-function slugify(str) {
-  return str
-    .toString()
+function slugify(value: React.ReactNode): string {
+  return String(value)
     .toLowerCase()
     .trim()
     .replace(/\s+/g, '-')
@@ -155,9 +159,10 @@ function slugify(str) {
     .replace(/\-\-+/g, '-');
 }
 
-function createHeading(level) {
-  const Heading = ({ children }) => {
-    let slug = slugify(children);
+function createHeading(level: number) {
+  const Heading = ({ children }: { children: React.ReactNode }) => {
+    const slug = slugify(children);
+
     return React.createElement(
       `h${level}`,
       { id: slug },
@@ -168,7 +173,7 @@ function createHeading(level) {
           className: 'anchor',
         }),
       ],
-      children
+      children,
     );
   };
 
@@ -177,7 +182,7 @@ function createHeading(level) {
   return Heading;
 }
 
-let components = {
+const components = {
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
@@ -188,14 +193,15 @@ let components = {
   a: CustomLink,
   code: Code,
   Table,
-  // mermaid: MermaidClient, // Using the dynamically imported Mermaid component here
 };
 
-export function CustomMDX(props) {
-  return (
-    <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
-    />
-  );
+interface CustomMDXProps {
+  source: string;
+}
+
+export async function CustomMDX({ source }: CustomMDXProps) {
+  return MDXRemote({
+    source,
+    components,
+  });
 }
