@@ -28,11 +28,33 @@ Each layer deserves unit tests and observability. When I instrument tool calls w
 
 ## Tooling patterns I reuse
 
-| Pattern | When to apply | Failure mode it prevents |
-| --- | --- | --- |
-| **Permissioned tool registry** | Teams with dozens of actions and rotating contributors | Accidental exposure of destructive commands |
-| **Budget broker** | Expensive API calls or GPU usage | Agents exceeding cost ceilings |
-| **Reflection loop** | High-stakes tasks with fuzzy requirements | Agents accepting incorrect intermediate answers |
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>When to apply</th>
+<th>Failure mode it prevents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Permissioned tool registry</strong></td>
+<td>Teams with dozens of actions and rotating contributors</td>
+<td>Accidental exposure of destructive commands</td>
+</tr>
+<tr>
+<td><strong>Budget broker</strong></td>
+<td>Expensive API calls or GPU usage</td>
+<td>Agents exceeding cost ceilings</td>
+</tr>
+<tr>
+<td><strong>Reflection loop</strong></td>
+<td>High-stakes tasks with fuzzy requirements</td>
+<td>Agents accepting incorrect intermediate answers</td>
+</tr>
+</tbody>
+</table>
+
 
 These patterns prevent "cascade failure" where one unexpected model response knocks the entire workflow offline.
 
