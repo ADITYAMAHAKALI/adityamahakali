@@ -93,6 +93,28 @@ IEEE — *October 23, 2024*
 
 ---
 
+### 📓 Publish Obsidian notes as blog posts
+
+1. Create a Markdown file inside `content/blog` with YAML front matter:
+
+   ```markdown
+   ---
+   title: My new note
+   description: A short teaser for the list view.
+   publishedAt: 2025-01-01
+   tags:
+     - Obsidian
+     - AI
+   ---
+   ```
+
+2. Write your content using the same Markdown syntax you already use in Obsidian.
+3. Commit and push — the site will list the new note automatically under **/blog**.
+
+> ✅ Include `publishedAt` so posts are sorted correctly. Add `draft: true` in the front matter to hide a note from the live site.
+
+---
+
 > "Code with purpose. Engineer with empathy. Build with impact."
 
 © 2025 Aditya Mahakali. All rights reserved.
