@@ -8,6 +8,7 @@ import {
 } from "react-icons/fa";
 import { SiLeetcode } from "react-icons/si";
 import Image from "next/image";
+import Link from "next/link";
 import pp from "./images/dp.jpeg";
 
 export default function Page() {
@@ -83,6 +84,12 @@ export default function Page() {
                 >
                   Download Resume
                 </a>
+                <Link
+                  href="/blog"
+                  className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded-lg font-medium"
+                >
+                  Visit Blog
+                </Link>
               </div>
             </div>
           </div>
