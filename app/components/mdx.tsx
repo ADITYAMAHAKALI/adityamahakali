@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { highlight } from 'sugar-high';
+import { tokenize } from 'sugar-high';
 import React from 'react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 
@@ -57,9 +57,96 @@ function RoundedImage({ alt, className, ...rest }: React.ComponentProps<typeof I
   return <Image alt={alt ?? ''} className={composedClassName} {...rest} />;
 }
 
-function Code({ children, ...props }: React.HTMLAttributes<HTMLElement>) {
-  const codeHTML = highlight(String(children));
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />;
+const TOKEN_TYPES = [
+  'identifier',
+  'keyword',
+  'string',
+  'class',
+  'property',
+  'entity',
+  'jsxliterals',
+  'sign',
+  'comment',
+  'break',
+  'space',
+] as const;
+
+const BREAK_TOKEN_INDEX = TOKEN_TYPES.indexOf('break');
+
+function toCodeString(children: React.ReactNode): string {
+  return React.Children.toArray(children)
+    .map((child) => {
+      if (typeof child === 'string' || typeof child === 'number') {
+        return String(child);
+      }
+      return '';
+    })
+    .join('');
+}
+
+function renderToken(
+  typeIndex: number,
+  value: string,
+  key: string
+): React.ReactElement {
+  const tokenName = TOKEN_TYPES[typeIndex] ?? 'identifier';
+
+  return (
+    <span
+      key={key}
+      className={`sh__token--${tokenName}`}
+      style={{ color: `var(--sh-${tokenName})` }}
+    >
+      {value}
+    </span>
+  );
+}
+
+function createHighlightedNodes(code: string) {
+  const tokens = tokenize(code);
+  const lines: React.ReactElement[][] = [];
+  let currentLine: React.ReactElement[] = [];
+
+  const flushLine = () => {
+    lines.push(currentLine);
+    currentLine = [];
+  };
+
+  tokens.forEach(([typeIndex, value], tokenIndex) => {
+    if (typeIndex === BREAK_TOKEN_INDEX) {
+      flushLine();
+      return;
+    }
+
+    const segments = value.split('\n');
+
+    segments.forEach((segment, segmentIndex) => {
+      currentLine.push(
+        renderToken(typeIndex, segment, `${tokenIndex}-${segmentIndex}`)
+      );
+
+      if (segmentIndex < segments.length - 1) {
+        flushLine();
+      }
+    });
+  });
+
+  if (currentLine.length || lines.length === 0) {
+    flushLine();
+  }
+
+  return lines.map((lineTokens, lineIndex) => (
+    <span key={`line-${lineIndex}`} className="sh__line">
+      {lineTokens}
+    </span>
+  ));
+}
+
+function Code({ children, ...props }) {
+  const code = toCodeString(children);
+  const highlighted = createHighlightedNodes(code);
+
+  return <code {...props}>{highlighted}</code>;
 }
 
 function slugify(value: React.ReactNode): string {
