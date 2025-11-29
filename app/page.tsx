@@ -159,7 +159,7 @@ export default function Page() {
                   Contact Me
                 </a>
                 <a
-                  href="https://rxresu.me/adityamahakali/aditya-mahakali"
+                  href="https://drive.google.com/file/d/1hPDU5O51nLcL9-BfaHTtl46fYszLzg6Y/view"
                   className="bg-transparent hover:bg-blue-700 border border-white text-white py-2 px-4 rounded-lg font-medium"
                 >
                   Download Resume
