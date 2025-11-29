@@ -1,15 +1,95 @@
 import {
-  FaGithub,
-  FaLinkedin,
-  FaMedium,
-  FaLaptopCode,
+  FaBrain,
   FaChalkboardTeacher,
   FaChess,
+  FaCloud,
+  FaDatabase,
+  FaDocker,
+  FaGithub,
+  FaGitAlt,
+  FaLanguage,
+  FaLayerGroup,
+  FaLaptopCode,
+  FaLinkedin,
+  FaMedium,
+  FaNetworkWired,
+  FaNodeJs,
+  FaProjectDiagram,
+  FaRobot,
+  FaSearch,
+  FaEye,
+  FaLinux,
 } from "react-icons/fa";
-import { SiLeetcode } from "react-icons/si";
+import {
+  SiAnsible,
+  SiDjango,
+  SiElasticsearch,
+  SiFastapi,
+  SiFlask,
+  SiGraphql,
+  SiLeetcode,
+  SiSpringboot,
+} from "react-icons/si";
+import { GiArtificialIntelligence } from "react-icons/gi";
+import SkillCard, { Skill } from "./components/SkillCard";
 import Image from "next/image";
 import Link from "next/link";
 import pp from "./images/dp.jpeg";
+
+type SkillCategory = {
+  title: string;
+  skills: Skill[];
+};
+
+const skillCategories: SkillCategory[] = [
+  {
+    title: "AI Engineering",
+    skills: [
+      { name: "Machine Learning", icon: FaBrain },
+      { name: "Deep Learning", icon: GiArtificialIntelligence },
+      { name: "Generative AI", icon: FaRobot },
+      { name: "NLP", icon: FaLanguage },
+      { name: "Computer Vision", icon: FaEye },
+      { name: "AI Search", icon: FaSearch },
+      { name: "Multimodal Models", icon: FaLayerGroup },
+      { name: "Agents", icon: FaProjectDiagram },
+      { name: "MCP", icon: FaNetworkWired },
+    ],
+  },
+  {
+    title: "Backend Development",
+    skills: [
+      { name: "Spring Boot", icon: SiSpringboot },
+      { name: "Django", icon: SiDjango },
+      { name: "Flask", icon: SiFlask },
+      { name: "NodeJS", icon: FaNodeJs },
+      { name: "FastAPI", icon: SiFastapi },
+    ],
+  },
+  {
+    title: "Database Systems",
+    skills: [
+      { name: "SQL", icon: FaDatabase },
+      { name: "NoSQL", icon: FaDatabase },
+      { name: "GraphQL", icon: SiGraphql },
+      { name: "Elastic", icon: SiElasticsearch },
+      { name: "Milvus", icon: FaProjectDiagram },
+      { name: "Weaviate", icon: FaProjectDiagram },
+      { name: "Chroma", icon: FaProjectDiagram },
+      { name: "Neo4j", icon: FaNetworkWired },
+    ],
+  },
+  {
+    title: "DevOps",
+    skills: [
+      { name: "Linux", icon: FaLinux },
+      { name: "Git", icon: FaGitAlt },
+      { name: "Docker", icon: FaDocker },
+      { name: "OpenShift", icon: FaCloud },
+      { name: "Ansible", icon: SiAnsible },
+    ],
+  },
+];
 
 export default function Page() {
   return (
@@ -447,119 +527,14 @@ export default function Page() {
             My Skills & Expertise
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3 text-blue-200">
-                AI Engineering
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Machine Learning
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Deep Learning
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Generative AI
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  NLP
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Computer Vision
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  AI Search
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Multimodal Models
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Agents
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  MCP
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3 text-blue-200">
-                Backend Development
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Spring Boot
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Django
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Flask
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  NodeJS
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Fast API
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3 text-blue-200">
-                Database Systems
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  SQL
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  NoSQL
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  GraphQL
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Elastic
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Milvus
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Weaviate
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Chroma
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Neo4j
-                </span>
-              </div>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm p-6 rounded-lg">
-              <h3 className="text-xl font-semibold mb-3 text-blue-200">
-                DevOps
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Linux
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Git
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Docker
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  OpenShift
-                </span>
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm">
-                  Ansible
-                </span>
-              </div>
-            </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+            {skillCategories.map((category) => (
+              <SkillCard
+                key={category.title}
+                title={category.title}
+                skills={category.skills}
+              />
+            ))}
           </div>
         </div>
       </div>
