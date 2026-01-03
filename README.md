@@ -34,7 +34,8 @@ I specialize in crafting intelligent systems using modern AI techniques. My work
 ## 🔐 Featured Open Source
 
 ### **Veridex**
-Semantic verification, similarity analysis, and embedding-based reasoning for modern AI systems.
+A modular, probabilistic, and research-grounded AI content detection library.
+```Veridex is a production-ready library for detecting AI-generated content across multiple modalities: text, image, and audio. Unlike binary classifiers, Veridex provides probabilistic detection with confidence estimates and interpretable signals.```
 
 <p>
   <img src="https://img.shields.io/pypi/v/veridex?color=blue" />
