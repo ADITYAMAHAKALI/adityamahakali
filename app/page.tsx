@@ -19,6 +19,7 @@ import {
   FaSearch,
   FaEye,
   FaLinux,
+  FaBook,
 } from "react-icons/fa";
 import {
   SiAnsible,
@@ -200,6 +201,66 @@ export default function Page() {
               robust backend systems and developing secure APIs to building
               intuitive and user-friendly frontends.
             </p>
+          </div>
+        </div>
+
+        {/* Featured Open Source Section */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold border-b-2 border-blue-500 pb-2 mb-6">
+            Featured Open Source
+          </h2>
+
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-gray-800 dark:to-gray-700 p-8 rounded-lg shadow-lg border-l-4 border-blue-500 transition-transform hover:scale-[1.01]">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+              <div>
+                <h3 className="text-2xl font-bold mb-2 text-blue-900 dark:text-white">
+                  Veridex
+                </h3>
+                <p className="text-lg font-semibold text-blue-700 dark:text-blue-300 mb-2">
+                  A modular, probabilistic, and research-grounded AI content detection library.
+                </p>
+              </div>
+              <div className="flex space-x-4 mt-4 md:mt-0">
+                <a
+                  href="https://github.com/ADITYAMAHAKALI/veridex"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-gray-900 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
+                >
+                  <FaGithub /> GitHub
+                </a>
+                <a
+                  href="https://adityamahakali.github.io/veridex/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition"
+                >
+                  <FaBook /> Docs
+                </a>
+              </div>
+            </div>
+
+            <p className="text-gray-700 dark:text-gray-300 mb-6 leading-relaxed">
+              Veridex is a production-ready library for detecting AI-generated content across multiple modalities: text, image, and audio. Unlike binary classifiers, Veridex provides probabilistic detection with confidence estimates and interpretable signals.
+            </p>
+
+            <div className="flex flex-wrap gap-2 mb-2">
+              <span className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-3 py-1 rounded-full text-sm font-medium">
+                Python
+              </span>
+              <span className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-3 py-1 rounded-full text-sm font-medium">
+                AI Detection
+              </span>
+              <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-3 py-1 rounded-full text-sm font-medium">
+                Probabilistic
+              </span>
+              <span className="bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-3 py-1 rounded-full text-sm font-medium">
+                Multi-modal
+              </span>
+              <span className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 px-3 py-1 rounded-full text-sm font-medium">
+                Open Source
+              </span>
+            </div>
           </div>
         </div>
 
