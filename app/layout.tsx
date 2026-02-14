@@ -13,8 +13,11 @@ export const metadata: Metadata = {
   description:
     "AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Expert in building production AI systems with LLMs, embeddings, and retrieval engineering. Portfolio showcasing real-world AI/ML projects.",
   icons: {
-    icon: "/favicon.svg",
-    apple: "/favicon.svg",
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
   },
   manifest: "/manifest.json",
   openGraph: {
