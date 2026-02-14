@@ -203,8 +203,8 @@ table {
   --bg: #021526;
   --bg-elev: #03346e;
   --bg-elev-2: #0a3f75;
-  --text: #e2e2b6;
-  --text-soft: rgba(226, 226, 182, 0.86);
+  --text: #ebebd8;
+  --text-soft: rgba(237, 237, 227, 0.86);
   --accent: #6eacda;
   --accent-soft: rgba(110, 172, 218, 0.26);
   --accent-strong: rgba(110, 172, 218, 0.38);
@@ -1235,6 +1235,137 @@ body {
     bottom: 3.4rem; /* keep above the legend */
   }
 }
+
+/* Light mode overrides for knowledge graph */
+:root.theme-light .kg-wrap {
+  background:
+    radial-gradient(800px 260px at 0 0, var(--accent-soft), transparent 70%),
+    radial-gradient(
+      640px 280px at 100% 120%,
+      rgba(11, 95, 159, 0.08),
+      transparent 72%
+    ),
+    var(--card-bg);
+}
+
+:root.theme-light .kg-link {
+  stroke: rgba(11, 95, 159, 0.35);
+}
+
+:root.theme-light .kg-link[data-category="skill-cluster"] {
+  stroke: rgba(6, 95, 70, 0.4);
+}
+
+:root.theme-light .kg-link[data-category="cluster-project"] {
+  stroke: rgba(11, 95, 159, 0.45);
+}
+
+:root.theme-light .kg-link[data-category="project-skill"] {
+  stroke: rgba(184, 134, 11, 0.4);
+}
+
+:root.theme-light .kg-link[data-category="project-cluster"] {
+  stroke: rgba(11, 95, 159, 0.35);
+}
+
+:root.theme-light .kg-node-dot {
+  stroke: rgba(16, 35, 59, 0.5);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.15));
+}
+
+:root.theme-light .kg-node[data-kind="project"] .kg-node-dot {
+  fill: rgba(11, 95, 159, 0.95);
+  stroke: rgba(16, 35, 59, 0.6);
+}
+
+:root.theme-light .kg-node[data-kind="skill"] .kg-node-dot {
+  fill: rgba(16, 35, 59, 0.88);
+  stroke: rgba(11, 95, 159, 0.4);
+}
+
+:root.theme-light .kg-node[data-kind="cluster"] .kg-node-dot {
+  fill: rgba(230, 235, 245, 0.98);
+  stroke: rgba(11, 95, 159, 0.7);
+  stroke-width: 2.5px;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2))
+    drop-shadow(0 0 18px rgba(11, 95, 159, 0.25));
+}
+
+:root.theme-light .kg-node[data-kind="skill"][data-group="ML"] .kg-node-dot {
+  fill: rgba(11, 95, 159, 0.85);
+  stroke: rgba(16, 35, 59, 0.5);
+}
+
+:root.theme-light .kg-node[data-kind="skill"][data-group="FullStack"] .kg-node-dot {
+  fill: rgba(6, 95, 70, 0.85);
+  stroke: rgba(16, 35, 59, 0.45);
+}
+
+:root.theme-light .kg-node-label {
+  fill: rgba(16, 35, 59, 0.92);
+  stroke: rgba(243, 244, 236, 0.85);
+  stroke-width: 3px;
+}
+
+:root.theme-light .kg-node[data-kind="project"] .kg-node-label {
+  fill: rgba(16, 35, 59, 0.95);
+}
+
+:root.theme-light .kg-tooltip {
+  background: rgba(243, 244, 236, 0.96);
+  border: 1px solid rgba(11, 95, 159, 0.25);
+  box-shadow:
+    0 18px 46px rgba(0, 0, 0, 0.15),
+    0 0 34px rgba(11, 95, 159, 0.12);
+}
+
+:root.theme-light .kg-tip-kind {
+  color: rgba(16, 35, 59, 0.7);
+}
+
+:root.theme-light .kg-legend {
+  background: rgba(243, 244, 236, 0.85);
+  border: 1px solid rgba(11, 95, 159, 0.22);
+}
+
+:root.theme-light .kg-search-input {
+  border: 1px solid rgba(11, 95, 159, 0.3);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+:root.theme-light .kg-search-input:focus {
+  border-color: rgba(11, 95, 159, 0.6);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+:root.theme-light .kg-search-input::placeholder {
+  color: rgba(16, 35, 59, 0.45);
+}
+
+:root.theme-light .kg-legend-item {
+  background: rgba(11, 95, 159, 0.12);
+}
+
+:root.theme-light .kg-legend-clear {
+  border: 1px solid rgba(16, 35, 59, 0.25);
+  background: rgba(16, 35, 59, 0.08);
+  color: rgba(16, 35, 59, 0.95);
+}
+
+:root.theme-light .kg-legend-clear:hover {
+  background: rgba(16, 35, 59, 0.14);
+  border-color: rgba(16, 35, 59, 0.35);
+}
+
+:root.theme-light .kg-legend-item[data-kind="skill"]::before {
+  background: rgba(16, 35, 59, 0.85);
+}
+
+:root.theme-light .kg-legend-item[data-kind="cluster"]::before {
+  background: rgba(230, 235, 245, 1);
+  box-shadow: 0 0 0 2px rgba(11, 95, 159, 0.5);
+}
+
 
 .experience-timeline {
   display: grid;
