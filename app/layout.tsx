@@ -30,11 +30,11 @@ export const metadata: Metadata = {
     type: "profile",
     images: [
       {
-        url: `${baseUrl}/dp.jpeg`,
-        width: 800,
-        height: 800,
-        alt: "Aditya Mahakali - AI Engineer at IBM",
-        type: "image/jpeg",
+        url: `${baseUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        alt: "Aditya Mahakali - AI Engineer specializing in GenAI, RAG, and ML",
+        type: "image/png",
       },
     ],
   },
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     title: "Aditya Mahakali - AI Engineer | ML & GenAI Specialist",
     description:
       "AI Engineer at IBM specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Building production AI systems with LLMs and retrieval engineering.",
-    images: [`${baseUrl}/dp.jpeg`],
+    images: [`${baseUrl}/og-image.png`],
     creator: "@adityamahakali",
   },
   robots: {
