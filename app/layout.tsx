@@ -1,8 +1,5 @@
-import './global.css';
+import "./global.css";
 import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import { Navbar } from "./components/nav";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { baseUrl } from "./sitemap";
@@ -15,6 +12,10 @@ export const metadata: Metadata = {
   },
   description:
     "Portfolio of Aditya Mahakali, AI/ML Engineer at IBM. Showcasing expertise in Generative AI, Machine Learning, and Full-Stack Development.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   openGraph: {
     title: "Aditya Mahakali - AI/ML Engineer",
     description:
@@ -66,14 +67,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={cx(
-        "text-black bg-white dark:text-white dark:bg-black",
-        GeistSans.variable,
-        GeistMono.variable
-      )}
-    >
+    <html lang="en" className={cx("theme-dark")}>
       <body className="antialiased w-full">
         <div className="flex flex-col min-h-screen">
           {/* <header className="w-full px-6 py-4 border-b border-gray-200 dark:border-gray-800">
