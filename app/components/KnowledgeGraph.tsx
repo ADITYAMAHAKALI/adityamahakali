@@ -81,18 +81,20 @@ export default function KnowledgeGraph({
     // Include connected nodes (one hop away)
     const expandedNodeIds = new Set(matchedNodeIds);
     graphData.links.forEach((l) => {
-      const s = typeof l.source === "string" ? l.source : l.source?.id;
-      const t = typeof l.target === "string" ? l.target : l.target?.id;
-      if (matchedNodeIds.has(s)) expandedNodeIds.add(t);
-      if (matchedNodeIds.has(t)) expandedNodeIds.add(s);
+      const s = typeof l.source === "string" ? l.source : (l.source as any)?.id;
+      const t = typeof l.target === "string" ? l.target : (l.target as any)?.id;
+      if (s && matchedNodeIds.has(s)) expandedNodeIds.add(t);
+      if (t && matchedNodeIds.has(t)) expandedNodeIds.add(s);
     });
 
     return {
       nodes: graphData.nodes.filter((n) => expandedNodeIds.has(n.id)),
       links: graphData.links.filter((l) => {
-        const s = typeof l.source === "string" ? l.source : l.source?.id;
-        const t = typeof l.target === "string" ? l.target : l.target?.id;
-        return expandedNodeIds.has(s) && expandedNodeIds.has(t);
+        const s =
+          typeof l.source === "string" ? l.source : (l.source as any)?.id;
+        const t =
+          typeof l.target === "string" ? l.target : (l.target as any)?.id;
+        return s && t && expandedNodeIds.has(s) && expandedNodeIds.has(t);
       }),
     };
   }, [graphData, searchQuery]);

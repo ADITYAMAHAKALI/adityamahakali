@@ -686,7 +686,11 @@ body {
   border-radius: 16px;
   padding: 1.1rem;
   background:
-    radial-gradient(820px 280px at 0 0, rgba(226, 182, 110, 0.22), transparent 72%),
+    radial-gradient(
+      820px 280px at 0 0,
+      rgba(226, 182, 110, 0.22),
+      transparent 72%
+    ),
     radial-gradient(720px 220px at 0 0, var(--accent-soft), transparent 72%),
     radial-gradient(
       560px 240px at 100% 120%,
@@ -810,68 +814,36 @@ body {
 
 /* Alternating section backgrounds */
 .experience-section {
-  background: linear-gradient(
-    135deg,
-    rgba(110, 172, 218, 0.08),
-    transparent
-  );
+  background: linear-gradient(135deg, rgba(110, 172, 218, 0.08), transparent);
 }
 
 .project-showcase {
-  background: linear-gradient(
-    135deg,
-    rgba(170, 227, 210, 0.08),
-    transparent
-  );
+  background: linear-gradient(135deg, rgba(170, 227, 210, 0.08), transparent);
 }
 
 .cert-section {
-  background: linear-gradient(
-    135deg,
-    rgba(226, 182, 110, 0.08),
-    transparent
-  );
+  background: linear-gradient(135deg, rgba(226, 182, 110, 0.08), transparent);
 }
 
 .graph-section {
-  background: linear-gradient(
-    135deg,
-    rgba(110, 172, 218, 0.12),
-    transparent
-  );
+  background: linear-gradient(135deg, rgba(110, 172, 218, 0.12), transparent);
 }
 
 @media (prefers-color-scheme: light) {
   .experience-section {
-    background: linear-gradient(
-      135deg,
-      rgba(11, 95, 159, 0.06),
-      transparent
-    );
+    background: linear-gradient(135deg, rgba(11, 95, 159, 0.06), transparent);
   }
 
   .project-showcase {
-    background: linear-gradient(
-      135deg,
-      rgba(9, 150, 130, 0.06),
-      transparent
-    );
+    background: linear-gradient(135deg, rgba(9, 150, 130, 0.06), transparent);
   }
 
   .cert-section {
-    background: linear-gradient(
-      135deg,
-      rgba(186, 122, 54, 0.06),
-      transparent
-    );
+    background: linear-gradient(135deg, rgba(186, 122, 54, 0.06), transparent);
   }
 
   .graph-section {
-    background: linear-gradient(
-      135deg,
-      rgba(11, 95, 159, 0.1),
-      transparent
-    );
+    background: linear-gradient(135deg, rgba(11, 95, 159, 0.1), transparent);
   }
 }
 
@@ -1689,22 +1661,14 @@ body {
   width: 100%;
   padding: 1.4rem var(--page-pad) 0;
   margin: 1.2rem 0;
-  background: linear-gradient(
-    135deg,
-    rgba(170, 227, 210, 0.08),
-    transparent
-  );
+  background: linear-gradient(135deg, rgba(170, 227, 210, 0.08), transparent);
   border-radius: 12px;
   transition: background-color 200ms ease;
 }
 
 @media (prefers-color-scheme: light) {
   .skills-wrap {
-    background: linear-gradient(
-      135deg,
-      rgba(9, 150, 130, 0.06),
-      transparent
-    );
+    background: linear-gradient(135deg, rgba(9, 150, 130, 0.06), transparent);
   }
 }
 
@@ -1876,7 +1840,11 @@ body {
   border-radius: 16px;
   padding: 1rem;
   background:
-    radial-gradient(620px 220px at 0 0, rgba(170, 227, 210, 0.28), transparent 72%),
+    radial-gradient(
+      620px 220px at 0 0,
+      rgba(170, 227, 210, 0.28),
+      transparent 72%
+    ),
     radial-gradient(520px 180px at 0 0, var(--accent-soft), transparent 72%),
     var(--card-bg);
   box-shadow: var(--shadow);
