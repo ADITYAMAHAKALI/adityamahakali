@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   FaBook,
   FaBrain,
@@ -28,6 +29,7 @@ import {
   FaProjectDiagram,
   FaRobot,
   FaSearch,
+  FaChevronDown,
 } from "react-icons/fa";
 import {
   SiAnsible,
@@ -47,6 +49,10 @@ import SkillsStrips from "./components/SkillsStrips";
 import BottomDock, { DockItem } from "./components/BottomDock";
 import ThemeToggle from "./components/ThemeToggle";
 import { useTheme } from "./components/useTheme";
+import KnowledgeGraph, {
+  GraphLink,
+  GraphNode,
+} from "./components/KnowledgeGraph";
 
 const mlStrip: Skill[] = [
   { name: "Machine Learning", icon: FaBrain },
@@ -61,6 +67,11 @@ const mlStrip: Skill[] = [
   { name: "Embeddings", icon: FaLayerGroup },
   { name: "Re-ranking", icon: FaSearch },
 ];
+
+const certifications: Record<string, string[]> = {
+  Coursera: ["Intro To Python", "Algorithmic ToolBox"],
+  Kaggle: ["Intro To ML", "Intro to Deep Learning", "Intro to Computer Vision"],
+};
 
 const fullStackStrip: Skill[] = [
   { name: "Spring Boot", icon: SiSpringboot },
@@ -78,6 +89,184 @@ const fullStackStrip: Skill[] = [
   { name: "OpenShift", icon: FaCloud },
   { name: "Ansible", icon: SiAnsible },
 ];
+
+function buildGraphData(input: {
+  projects: Array<{
+    title: string;
+    tag: string;
+    summary: string;
+    stack: string[];
+  }>;
+  ml: Array<{ name: string }>;
+  fullstack: Array<{ name: string }>;
+}) {
+  const nodes: GraphNode[] = [];
+  const links: GraphLink[] = [];
+
+  const addNode = (node: GraphNode) => {
+    if (!nodes.some((n) => n.id === node.id)) nodes.push(node);
+  };
+
+  const getNodeKind = (id: string): GraphNode["kind"] => {
+    const node = nodes.find((n) => n.id === id);
+    return node?.kind || "skill";
+  };
+
+  const getLinkCategory = (sourceId: string, targetId: string) => {
+    const sourceKind = getNodeKind(sourceId);
+    const targetKind = getNodeKind(targetId);
+
+    if (sourceKind === "skill" && targetKind === "cluster")
+      return "skill-cluster";
+    if (sourceKind === "cluster" && targetKind === "project")
+      return "cluster-project";
+    if (sourceKind === "project" && targetKind === "skill")
+      return "project-skill";
+    if (sourceKind === "project" && targetKind === "cluster")
+      return "project-cluster";
+
+    return undefined;
+  };
+
+  addNode({
+    id: "cluster:projects",
+    label: "Projects",
+    kind: "cluster",
+    group: "Cluster",
+  });
+  addNode({
+    id: "cluster:ml",
+    label: "ML / GenAI",
+    kind: "cluster",
+    group: "Cluster",
+  });
+  addNode({
+    id: "cluster:fullstack",
+    label: "Full-stack",
+    kind: "cluster",
+    group: "Cluster",
+  });
+
+  const mlSkills = new Set(input.ml.map((s) => s.name));
+  const fsSkills = new Set(input.fullstack.map((s) => s.name));
+
+  const normalize = (s: string) => s.toLowerCase().replace(/\s+/g, " ").trim();
+
+  const skillId = (label: string) => `skill:${normalize(label)}`;
+  const projectId = (label: string) => `project:${normalize(label)}`;
+
+  const addSkill = (label: string) => {
+    const id = skillId(label);
+    const group = mlSkills.has(label)
+      ? "ML"
+      : fsSkills.has(label)
+        ? "FullStack"
+        : "Other";
+    addNode({ id, label, kind: "skill", group });
+    const linkObj = {
+      source: id,
+      target:
+        group === "ML"
+          ? "cluster:ml"
+          : group === "FullStack"
+            ? "cluster:fullstack"
+            : "cluster:projects",
+      strength: 0.35,
+      category: getLinkCategory(
+        id,
+        group === "ML"
+          ? "cluster:ml"
+          : group === "FullStack"
+            ? "cluster:fullstack"
+            : "cluster:projects",
+      ) as any,
+    };
+    links.push(linkObj);
+    return id;
+  };
+
+  input.ml.forEach((s) =>
+    addNode({ id: skillId(s.name), label: s.name, kind: "skill", group: "ML" }),
+  );
+  input.fullstack.forEach((s) =>
+    addNode({
+      id: skillId(s.name),
+      label: s.name,
+      kind: "skill",
+      group: "FullStack",
+    }),
+  );
+
+  nodes.forEach((n) => {
+    if (n.kind !== "skill") return;
+    const targetId = n.group === "ML" ? "cluster:ml" : "cluster:fullstack";
+    const linkObj = {
+      source: n.id,
+      target: targetId,
+      strength: 0.28,
+      category: getLinkCategory(n.id, targetId) as any,
+    };
+    links.push(linkObj);
+  });
+
+  input.projects.forEach((p) => {
+    const id = projectId(p.title);
+    addNode({
+      id,
+      label: p.title,
+      kind: "project",
+      group: p.tag,
+      meta: p.summary,
+    });
+    links.push({
+      source: id,
+      target: "cluster:projects",
+      strength: 0.55,
+      category: getLinkCategory(id, "cluster:projects") as any,
+    });
+
+    const stackSkills = new Set<string>(p.stack);
+    let hasMLSkills = false;
+    let hasFullStackSkills = false;
+
+    Array.from(stackSkills).forEach((item) => {
+      const existing = nodes.find(
+        (n) => n.kind === "skill" && n.label === item,
+      );
+      const sid = existing ? existing.id : addSkill(item);
+      links.push({
+        source: id,
+        target: sid,
+        strength: 0.95,
+        category: getLinkCategory(id, sid) as any,
+      });
+
+      // Track if this project has ML or FullStack skills
+      if (mlSkills.has(item)) hasMLSkills = true;
+      if (fsSkills.has(item)) hasFullStackSkills = true;
+    });
+
+    // Add direct links from clusters to projects that use their skills
+    if (hasMLSkills) {
+      links.push({
+        source: "cluster:ml",
+        target: id,
+        strength: 0.75,
+        category: getLinkCategory("cluster:ml", id) as any,
+      });
+    }
+    if (hasFullStackSkills) {
+      links.push({
+        source: "cluster:fullstack",
+        target: id,
+        strength: 0.75,
+        category: getLinkCategory("cluster:fullstack", id) as any,
+      });
+    }
+  });
+
+  return { nodes, links };
+}
 
 const dockItems: DockItem[] = [
   { label: "Home", href: "/", icon: FaHome },
@@ -122,7 +311,8 @@ const experienceJourney = [
       {
         phase: "Learning Phase",
         title: "Full-stack software development",
-        detail: "Hands-on progression through backend, frontend, delivery, and app security.",
+        detail:
+          "Hands-on progression through backend, frontend, delivery, and app security.",
         stack: "Spring Boot -> Angular -> Docker -> Security",
       },
       {
@@ -423,28 +613,85 @@ const projects: ProjectCaseStudy[] = [
   },
 ];
 
+const graphData = buildGraphData({
+  projects,
+  ml: mlStrip,
+  fullstack: fullStackStrip,
+});
+
 const certs = [
-  ["watsonx.governance Sales Foundation", "https://www.credly.com/badges/0227055b-7eb1-494c-9ab1-104adeca49c0"],
-  ["2025 IBMer watsonx Challenge", "https://www.credly.com/badges/039f0f8f-006a-4f8a-aeab-f303626bbcad"],
-  ["watsonx Orchestrate Technical Sales Intermediate", "https://www.credly.com/badges/d7f58977-4eec-4405-a5e9-87876d4e5738"],
-  ["Terraform Sales Foundation", "https://www.credly.com/badges/eae0a128-942f-4409-bf94-41f3ef379a6e"],
-  ["watsonx Orchestrate Practitioner Advanced", "https://www.credly.com/badges/c7a35feb-ae1c-4fca-b491-4cd6da0dec98"],
-  ["Enterprise Design Thinking - Team Essentials for AI", "https://www.credly.com/badges/ef3cf5c7-7cf8-4148-b5ca-b0314c46c69c"],
-  ["Enterprise Design Thinking Practitioner", "https://www.credly.com/badges/4e209908-e6bd-4043-ad0a-3e667a2989d6"],
-  ["Vault Sales Foundation", "https://www.credly.com/badges/689d904f-3b3f-47ca-9d01-eca0115b6444"],
-  ["InstructLab: Democratizing AI Models at Scale", "https://www.credly.com/badges/41d2bf4d-f5dc-47d9-8795-e920563b9093"],
-  ["watsonx Orchestrate Sales Foundation", "https://www.credly.com/badges/ad6bf3e0-aa37-43bb-97f4-a97e986e6c2f"],
-  ["Generative AI for Code with watsonx Code Assistant Sales Foundation", "https://www.credly.com/badges/a13da432-1dd2-4278-aff8-c561dd74bc74"],
-  ["Application Modernization with watsonx Code Assistant for Z Sales Foundation", "https://www.credly.com/badges/16973a39-1948-475e-aede-cf29fb7a75f0"],
-  ["watsonx.ai Practitioner Advanced", "https://www.credly.com/badges/aeb3657a-eaec-49c0-af3c-8f13995b0712"],
-  ["watsonx.ai Technical Sales Intermediate (Expired 27 Jun 2025)", "https://www.credly.com/badges/ff3e20b3-0263-4eb5-adbb-32274ceff28e"],
-  ["IBM watsonx Essentials", "https://www.credly.com/badges/0be51f4b-85e0-4ab1-96a2-0b0f0df3c715"],
-  ["Generative AI for Code with watsonx Code Assistant Technical Sales Intermediate", "https://www.credly.com/badges/b7a56594-910e-4225-8b56-8717f67dd05a"],
+  [
+    "watsonx.governance Sales Foundation",
+    "https://www.credly.com/badges/0227055b-7eb1-494c-9ab1-104adeca49c0",
+  ],
+  [
+    "2025 IBMer watsonx Challenge",
+    "https://www.credly.com/badges/039f0f8f-006a-4f8a-aeab-f303626bbcad",
+  ],
+  [
+    "watsonx Orchestrate Technical Sales Intermediate",
+    "https://www.credly.com/badges/d7f58977-4eec-4405-a5e9-87876d4e5738",
+  ],
+  [
+    "Terraform Sales Foundation",
+    "https://www.credly.com/badges/eae0a128-942f-4409-bf94-41f3ef379a6e",
+  ],
+  [
+    "watsonx Orchestrate Practitioner Advanced",
+    "https://www.credly.com/badges/c7a35feb-ae1c-4fca-b491-4cd6da0dec98",
+  ],
+  [
+    "Enterprise Design Thinking - Team Essentials for AI",
+    "https://www.credly.com/badges/ef3cf5c7-7cf8-4148-b5ca-b0314c46c69c",
+  ],
+  [
+    "Enterprise Design Thinking Practitioner",
+    "https://www.credly.com/badges/4e209908-e6bd-4043-ad0a-3e667a2989d6",
+  ],
+  [
+    "Vault Sales Foundation",
+    "https://www.credly.com/badges/689d904f-3b3f-47ca-9d01-eca0115b6444",
+  ],
+  [
+    "InstructLab: Democratizing AI Models at Scale",
+    "https://www.credly.com/badges/41d2bf4d-f5dc-47d9-8795-e920563b9093",
+  ],
+  [
+    "watsonx Orchestrate Sales Foundation",
+    "https://www.credly.com/badges/ad6bf3e0-aa37-43bb-97f4-a97e986e6c2f",
+  ],
+  [
+    "Generative AI for Code with watsonx Code Assistant Sales Foundation",
+    "https://www.credly.com/badges/a13da432-1dd2-4278-aff8-c561dd74bc74",
+  ],
+  [
+    "Application Modernization with watsonx Code Assistant for Z Sales Foundation",
+    "https://www.credly.com/badges/16973a39-1948-475e-aede-cf29fb7a75f0",
+  ],
+  [
+    "watsonx.ai Practitioner Advanced",
+    "https://www.credly.com/badges/aeb3657a-eaec-49c0-af3c-8f13995b0712",
+  ],
+  [
+    "watsonx.ai Technical Sales Intermediate (Expired 27 Jun 2025)",
+    "https://www.credly.com/badges/ff3e20b3-0263-4eb5-adbb-32274ceff28e",
+  ],
+  [
+    "IBM watsonx Essentials",
+    "https://www.credly.com/badges/0be51f4b-85e0-4ab1-96a2-0b0f0df3c715",
+  ],
+  [
+    "Generative AI for Code with watsonx Code Assistant Technical Sales Intermediate",
+    "https://www.credly.com/badges/b7a56594-910e-4225-8b56-8717f67dd05a",
+  ],
 ] as const;
 
 export default function Page() {
   const [openSection, setOpenSection] = useState<string | null>(null);
-  const [expandedCompanies, setExpandedCompanies] = useState<Record<string, boolean>>({});
+  const [expandedCompanies, setExpandedCompanies] = useState<
+    Record<string, boolean>
+  >({});
+  const [showKnowledgeGraph, setShowKnowledgeGraph] = useState(false);
   const { mode, setMode } = useTheme();
 
   const allExpanded =
@@ -466,19 +713,35 @@ export default function Page() {
     <div className="portfolio-shell">
       <header className="hero-wrap">
         <div className="hero-panel">
+          <div className="hero-top-actions" aria-label="Header actions">
+            <div className="hero-theme-toggle">
+              <ThemeToggle value={mode} onChange={setMode} />
+            </div>
+          </div>
           <div className="hero-center">
-            <Image
-              src={pp}
-              alt="Aditya Mahakali"
-              width={132}
-              height={132}
-              className="hero-avatar"
-              priority
-            />
+            <div className="hero-avatar-wrapper">
+              <button
+                type="button"
+                className="hero-avatar-button"
+                onClick={() => setShowKnowledgeGraph(!showKnowledgeGraph)}
+                aria-label="Toggle knowledge graph view"
+                title="Explore my knowledge graph"
+              >
+                <Image
+                  src={pp}
+                  alt="Aditya Mahakali"
+                  width={132}
+                  height={132}
+                  className="hero-avatar"
+                  priority
+                />
+              </button>
+            </div>
             <p className="hero-kicker">AI/ML Engineer at IBM</p>
             <h1 className="hero-title">Aditya Mahakali</h1>
             <p className="hero-tagline">
-              Building prodcution AI systems with reliable backends and governed AI.
+              Building prodcution AI systems with reliable backends and governed
+              AI.
             </p>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               <span className="chip-accent">Generative AI</span>
@@ -488,376 +751,613 @@ export default function Page() {
             </div>
             <div className="hero-about">
               <p>
-                Backend architecture, secure APIs, and retrieval-first grounded GenAI experiences.
+                Backend architecture, secure APIs, and retrieval-first grounded
+                GenAI experiences.
               </p>
             </div>
           </div>
         </div>
       </header>
-        <section className="skills-wrap" aria-labelledby="skills-heading">
-          <h2 id="skills-heading" className="section-title">My Skills & Expertise</h2>
-          <p className="section-subtitle">
-            Machine learning and full-stack software development.
-          </p>
-          <SkillsStrips ml={mlStrip} fullstack={fullStackStrip} />
-        </section>
-
-      <main className="content-wrap">
-        <section className="section-stack" aria-label="Profile sections">
-          <section className="experience-section" aria-labelledby="experience-heading">
-            <div className="section-header-row">
-              <h2 id="experience-heading" className="section-title-left">Experience</h2>
-              <div className="timeline-header-actions">
-                <p className="section-tag">Timeline</p>
-                <button
-                  type="button"
-                  className="timeline-toggle"
-                  onClick={toggleAll}
-                  aria-expanded={allExpanded}
-                >
-                  {allExpanded ? "Collapse all" : "Expand all"}
-                </button>
-              </div>
-            </div>
-            <div className="experience-timeline">
-              {experienceJourney.map((journey) => {
-                const expanded = Boolean(expandedCompanies[journey.company]);
-                const previewCount = journey.company.includes("IBM") ? 4 : 2;
-                const visibleStages = expanded ? journey.stages : journey.stages.slice(0, previewCount);
-                const hiddenCount = Math.max(0, journey.stages.length - visibleStages.length);
-
-                return (
-                  <article key={journey.company} className="timeline-card">
-                  <div className="timeline-head">
-                    <span className="timeline-icon"><FaBriefcase aria-hidden="true" /></span>
-                    <div>
-                      <h3 className="timeline-role">{journey.role}</h3>
-                      <p className="timeline-company">{journey.company}</p>
-                      <p className="timeline-period">{journey.period}</p>
-                    </div>
-                    <button
-                      type="button"
-                      className="timeline-toggle"
-                      onClick={() =>
-                        setExpandedCompanies((prev) => ({
-                          ...prev,
-                          [journey.company]: !expanded,
-                        }))
-                      }
-                      aria-expanded={expanded}
-                      aria-controls={`timeline-${journey.company}`}
-                    >
-                      {expanded ? "Show less" : "Show full timeline"}
-                    </button>
-                  </div>
-                  <ol className="timeline-steps" id={`timeline-${journey.company}`}>
-                    {visibleStages.map((stage) => (
-                      <li key={stage.title} className="timeline-step">
-                        <p className="timeline-phase">{stage.phase}</p>
-                        <h4 className="timeline-title">{stage.title}</h4>
-                        <p className="timeline-detail">{stage.detail}</p>
-                        <div className="timeline-meta">
-                          <span className="timeline-pill">{stage.stack}</span>
-                          {"metric" in stage && stage.metric ? (
-                            <span className="timeline-pill metric">{stage.metric}</span>
-                          ) : null}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                  {!expanded && hiddenCount > 0 ? (
-                    <button
-                      type="button"
-                      className="timeline-more"
-                      onClick={() =>
-                        setExpandedCompanies((prev) => ({
-                          ...prev,
-                          [journey.company]: true,
-                        }))
-                      }
-                      aria-controls={`timeline-${journey.company}`}
-                      aria-expanded={expanded}
-                    >
-                      +{hiddenCount} more milestones
-                    </button>
-                  ) : null}
-                </article>
-              );
-              })}
-            </div>
-          </section>
-
-          <section className="opensource-card" aria-labelledby="opensource-heading">
-            <div className="opensource-top">
-              <p className="opensource-kicker">Featured Open Source</p>
-              <div className="opensource-grid">
-                <div className="opensource-left">
-                  <h2 id="opensource-heading" className="opensource-title font-veridex-script">
-                    Veridex
-                  </h2>
-                  <p className="opensource-tagline">
-                    Modular, probabilistic, and research-grounded AI content detection.
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    {["Python", "AI Detection", "Probabilistic", "Multi-modal"].map((tag) => (
-                      <span key={`opensource-${tag}`} className="chip-muted">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                  <div className="opensource-actions">
-                    <a
-                      href="https://github.com/ADITYAMAHAKALI/veridex"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-secondary"
-                    >
-                      <FaGithub aria-hidden="true" /> GitHub
-                    </a>
-                    <a
-                      href="https://adityamahakali.github.io/veridex/"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="btn-secondary"
-                    >
-                      <FaBook aria-hidden="true" /> Docs
-                    </a>
-                  </div>
-                </div>
-                <div className="opensource-right" aria-label="Key features">
-                  <div className="opensource-feature">
-                    Detects AI-generated text, image, and audio.
-                  </div>
-                  <div className="opensource-feature">
-                    Uses confidence scores instead of binary output.
-                  </div>
-                  <div className="opensource-feature">
-                    Designed for research and production workflows.
-                  </div>
-                  <p className="opensource-desc">
-                    A production-ready library for detecting AI-generated content across text, image, and audio with confidence estimates and interpretable signals.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="project-showcase" aria-labelledby="projects-heading">
-            <div className="section-header-row">
-              <h2 id="projects-heading" className="section-title-left">Featured Projects</h2>
-              <p className="section-tag">Bento Spotlight</p>
-            </div>
-            <div className="project-grid">
-              {projects.map((project) => (
-                <details key={project.title} className="case-card">
-                  <summary className="case-summary">
-                    <div>
-                      <p className="project-tag">{project.tag}</p>
-                      <h3 className="case-title">{project.title}</h3>
-                      <p className="case-lede">{project.summary}</p>
-                      <div className="case-pill-row" aria-label="Tech stack">
-                        {project.stack.slice(0, 4).map((item) => (
-                          <span key={`${project.title}-${item}`} className="case-pill">
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <span className="case-cta">View details</span>
-                  </summary>
-                  <div className="case-body">
-                    <div className="case-section">
-                      <h4>Highlights</h4>
-                      <ul>
-                        {project.highlights.map((item) => (
-                          <li key={`${project.title}-h-${item}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="case-section">
-                      <h4>Architecture</h4>
-                      <ul>
-                        {project.architecture.map((item) => (
-                          <li key={`${project.title}-a-${item}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="case-section">
-                      <h4>Model + quality work</h4>
-                      <ul>
-                        {project.modelWork.map((item) => (
-                          <li key={`${project.title}-t-${item}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="case-section">
-                      <h4>Evaluation</h4>
-                      <ul>
-                        {project.evaluation.map((item) => (
-                          <li key={`${project.title}-e-${item}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="case-section">
-                      <h4>Deployment</h4>
-                      <ul>
-                        {project.deployment.map((item) => (
-                          <li key={`${project.title}-d-${item}`}>{item}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className="case-section">
-                      <h4>Full stack</h4>
-                      <div className="case-pill-row">
-                        {project.stack.map((item) => (
-                          <span key={`${project.title}-s-${item}`} className="case-pill">
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </details>
-              ))}
-            </div>
-          </section>
-
-          <section className="cert-section" aria-labelledby="certs-heading">
-            <div className="section-header-row">
-              <h2 id="certs-heading" className="section-title-left">Certifications & Badges</h2>
-              <p className="section-tag">Credly Portfolio</p>
-            </div>
-            <div className="cert-grid">
-              {certs.map(([name, url], index) => (
-                <a
-                  key={name}
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cert-item"
-                >
-                  <span className="cert-index">#{index + 1}</span>
-                  <span className="cert-name">{name}</span>
-                  <span className="cert-link">View Badge <FaExternalLinkAlt aria-hidden="true" /></span>
-                </a>
-              ))}
-            </div>
-          </section>
-
-          <section className="profile-grid" aria-label="Education and interests">
-            <section className="profile-card" aria-labelledby="education-heading">
-              <div className="profile-head">
-                <h2 id="education-heading" className="profile-title">Education</h2>
-                <p className="profile-subtitle">
-                  Academic grounding in computer science, mathematics, and applied ML.
-                </p>
-              </div>
-              <div className="profile-tags">
-                {["JNU", "MCA", "GATE CS", "UGC NET"].map((tag) => (
-                  <span key={`edu-${tag}`} className="chip-muted">{tag}</span>
-                ))}
-              </div>
-              <div className="profile-body">
-                <div className="edu-row">
-                  <p className="edu-degree">MCA, Computer Science and Applications</p>
-                  <p className="edu-meta">Jawaharlal Nehru University (2021–2023) · 7.65/9 CGPA</p>
-                </div>
-                <div className="edu-row">
-                  <p className="edu-degree">BSc, Computer Science</p>
-                  <p className="edu-meta">Central University of Rajasthan (2018–2021) · 7.74/10 CGPA</p>
-                </div>
-                <p className="edu-meta">Qualified: GATE CS, UGC NET (CS)</p>
-              </div>
-            </section>
-
-            <section className="profile-card" aria-labelledby="interests-heading">
-              <div className="profile-head">
-                <h2 id="interests-heading" className="profile-title">Interests</h2>
-                <p className="profile-subtitle">
-                  Outside work: strategy, teaching, and building systems end-to-end.
-                </p>
-              </div>
-              <div className="interest-grid" aria-label="Interest tiles">
-                <a
-                  className="interest-tile"
-                  href="https://www.chess.com/member/adityamahakali"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <FaChess aria-hidden="true" className="interest-icon" />
-                  <p className="interest-label">Chess</p>
-                  <p className="interest-desc">Strategy, calculation, and calm decision-making.</p>
-                </a>
-                <div className="interest-tile">
-                  <FaChalkboardTeacher aria-hidden="true" className="interest-icon" />
-                  <p className="interest-label">Teaching</p>
-                  <p className="interest-desc">Explaining complex systems with clarity and structure.</p>
-                </div>
-                <div className="interest-tile">
-                  <FaLaptopCode aria-hidden="true" className="interest-icon" />
-                  <p className="interest-label">Coding</p>
-                  <p className="interest-desc">Shipping end-to-end builds: API, retrieval, and UI.</p>
-                </div>
-              </div>
-              <ul className="interest-notes" aria-label="Interest notes">
-                <li>I enjoy mentoring, reviewing designs, and improving team delivery quality.</li>
-                <li>I prefer systems that are observable, secure-by-default, and built for real users.</li>
-                <li>I like turning research ideas into working products with clear metrics.</li>
-              </ul>
-            </section>
-          </section>
-          <br />
-          <section className="contact-card" aria-labelledby="contact-heading">
-            <div className="profile-head">
-              <h2 id="contact-heading" className="profile-title">Contact</h2>
-              <p className="profile-subtitle">
-                Open to collaborations, product builds, and AI engineering roles.
+      <AnimatePresence mode="wait">
+        {!showKnowledgeGraph ? (
+          <motion.div
+            key="normal-content"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+          >
+            <section className="skills-wrap" aria-labelledby="skills-heading">
+              <h2 id="skills-heading" className="section-title">
+                My Skills & Expertise
+              </h2>
+              <p className="section-subtitle">
+                Machine learning and full-stack software development.
               </p>
-            </div>
-            <div className="contact-grid">
-              <a className="contact-item" href="mailto:adityamahakali@gmail.com">
-                <FaEnvelope aria-hidden="true" />
-                <div>
-                  <p className="contact-label">Email</p>
-                  <p className="contact-value">adityamahakali@gmail.com</p>
+              <SkillsStrips ml={mlStrip} fullstack={fullStackStrip} />
+            </section>
+
+            <main className="content-wrap">
+              <section className="section-stack" aria-label="Profile sections">
+                <section
+                  className="experience-section"
+                  aria-labelledby="experience-heading"
+                >
+                  <div className="section-header-row">
+                    <h2 id="experience-heading" className="section-title-left">
+                      Experience
+                    </h2>
+                    <div className="timeline-header-actions">
+                      <p className="section-tag">Timeline</p>
+                      <button
+                        type="button"
+                        className="timeline-toggle"
+                        onClick={toggleAll}
+                        aria-expanded={allExpanded}
+                      >
+                        {allExpanded ? "Collapse all" : "Expand all"}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="experience-timeline">
+                    {experienceJourney.map((journey) => {
+                      const expanded = Boolean(
+                        expandedCompanies[journey.company],
+                      );
+                      const previewCount = journey.company.includes("IBM")
+                        ? 4
+                        : 2;
+                      const visibleStages = expanded
+                        ? journey.stages
+                        : journey.stages.slice(0, previewCount);
+                      const hiddenCount = Math.max(
+                        0,
+                        journey.stages.length - visibleStages.length,
+                      );
+
+                      return (
+                        <article
+                          key={journey.company}
+                          className="timeline-card"
+                        >
+                          <div className="timeline-head">
+                            <span className="timeline-icon">
+                              <FaBriefcase aria-hidden="true" />
+                            </span>
+                            <div>
+                              <h3 className="timeline-role">{journey.role}</h3>
+                              <p className="timeline-company">
+                                {journey.company}
+                              </p>
+                              <p className="timeline-period">
+                                {journey.period}
+                              </p>
+                            </div>
+                            <button
+                              type="button"
+                              className="timeline-toggle"
+                              onClick={() =>
+                                setExpandedCompanies((prev) => ({
+                                  ...prev,
+                                  [journey.company]: !expanded,
+                                }))
+                              }
+                              aria-expanded={expanded}
+                              aria-controls={`timeline-${journey.company}`}
+                            >
+                              {expanded ? "Show less" : "Show full timeline"}
+                            </button>
+                          </div>
+                          <ol
+                            className="timeline-steps"
+                            id={`timeline-${journey.company}`}
+                          >
+                            {visibleStages.map((stage) => (
+                              <li key={stage.title} className="timeline-step">
+                                <p className="timeline-phase">{stage.phase}</p>
+                                <h4 className="timeline-title">
+                                  {stage.title}
+                                </h4>
+                                <p className="timeline-detail">
+                                  {stage.detail}
+                                </p>
+                                <div className="timeline-meta">
+                                  <span className="timeline-pill">
+                                    {stage.stack}
+                                  </span>
+                                  {"metric" in stage && stage.metric ? (
+                                    <span className="timeline-pill metric">
+                                      {stage.metric}
+                                    </span>
+                                  ) : null}
+                                </div>
+                              </li>
+                            ))}
+                          </ol>
+                          {!expanded && hiddenCount > 0 ? (
+                            <button
+                              type="button"
+                              className="timeline-more"
+                              onClick={() =>
+                                setExpandedCompanies((prev) => ({
+                                  ...prev,
+                                  [journey.company]: true,
+                                }))
+                              }
+                              aria-controls={`timeline-${journey.company}`}
+                              aria-expanded={expanded}
+                            >
+                              +{hiddenCount} more milestones
+                            </button>
+                          ) : null}
+                        </article>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                <section
+                  className="opensource-card"
+                  aria-labelledby="opensource-heading"
+                >
+                  <div className="opensource-top">
+                    <p className="opensource-kicker">Featured Open Source</p>
+                    <div className="opensource-grid">
+                      <div className="opensource-left">
+                        <h2
+                          id="opensource-heading"
+                          className="opensource-title font-veridex-script"
+                        >
+                          Veridex
+                        </h2>
+                        <p className="opensource-tagline">
+                          Modular, probabilistic, and research-grounded AI
+                          content detection.
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {[
+                            "Python",
+                            "AI Detection",
+                            "Probabilistic",
+                            "Multi-modal",
+                          ].map((tag) => (
+                            <span
+                              key={`opensource-${tag}`}
+                              className="chip-muted"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="opensource-actions">
+                          <a
+                            href="https://github.com/ADITYAMAHAKALI/veridex"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-secondary"
+                          >
+                            <FaGithub aria-hidden="true" /> GitHub
+                          </a>
+                          <a
+                            href="https://adityamahakali.github.io/veridex/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-secondary"
+                          >
+                            <FaBook aria-hidden="true" /> Docs
+                          </a>
+                        </div>
+                      </div>
+                      <div
+                        className="opensource-right"
+                        aria-label="Key features"
+                      >
+                        <div className="opensource-feature">
+                          Detects AI-generated text, image, and audio.
+                        </div>
+                        <div className="opensource-feature">
+                          Uses confidence scores instead of binary output.
+                        </div>
+                        <div className="opensource-feature">
+                          Designed for research and production workflows.
+                        </div>
+                        <p className="opensource-desc">
+                          A production-ready library for detecting AI-generated
+                          content across text, image, and audio with confidence
+                          estimates and interpretable signals.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+
+                <section
+                  className="project-showcase"
+                  aria-labelledby="projects-heading"
+                >
+                  <div className="section-header-row">
+                    <h2 id="projects-heading" className="section-title-left">
+                      Featured Projects
+                    </h2>
+                    <p className="section-tag">Bento Spotlight</p>
+                  </div>
+                  <div className="project-grid">
+                    {projects.map((project) => (
+                      <details key={project.title} className="case-card">
+                        <summary className="case-summary">
+                          <div>
+                            <p className="project-tag">{project.tag}</p>
+                            <h3 className="case-title">{project.title}</h3>
+                            <p className="case-lede">{project.summary}</p>
+                            <div
+                              className="case-pill-row"
+                              aria-label="Tech stack"
+                            >
+                              {project.stack.slice(0, 4).map((item) => (
+                                <span
+                                  key={`${project.title}-${item}`}
+                                  className="case-pill"
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <span className="case-cta">View details</span>
+                        </summary>
+                        <div className="case-body">
+                          <div className="case-section">
+                            <h4>Highlights</h4>
+                            <ul>
+                              {project.highlights.map((item) => (
+                                <li key={`${project.title}-h-${item}`}>
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="case-section">
+                            <h4>Architecture</h4>
+                            <ul>
+                              {project.architecture.map((item) => (
+                                <li key={`${project.title}-a-${item}`}>
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="case-section">
+                            <h4>Model + quality work</h4>
+                            <ul>
+                              {project.modelWork.map((item) => (
+                                <li key={`${project.title}-t-${item}`}>
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="case-section">
+                            <h4>Evaluation</h4>
+                            <ul>
+                              {project.evaluation.map((item) => (
+                                <li key={`${project.title}-e-${item}`}>
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="case-section">
+                            <h4>Deployment</h4>
+                            <ul>
+                              {project.deployment.map((item) => (
+                                <li key={`${project.title}-d-${item}`}>
+                                  {item}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                          <div className="case-section">
+                            <h4>Full stack</h4>
+                            <div className="case-pill-row">
+                              {project.stack.map((item) => (
+                                <span
+                                  key={`${project.title}-s-${item}`}
+                                  className="case-pill"
+                                >
+                                  {item}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+
+                <section
+                  className="cert-section"
+                  aria-labelledby="certs-heading"
+                >
+                  <div className="section-header-row">
+                    <h2 id="certs-heading" className="section-title-left">
+                      Certifications & Badges
+                    </h2>
+                    <p className="section-tag">Credly Portfolio</p>
+                  </div>
+
+                  <details className="cert-accordion">
+                    <summary className="cert-accordion-summary">
+                      <span>Show Certifications & Badges</span>
+                      <FaChevronDown
+                        className="cert-accordion-icon"
+                        aria-hidden="true"
+                      />
+                    </summary>
+
+                    <div className="cert-accordion-body">
+                      <div className="cert-list">
+                        <h3 className="cert-list-title">Certifications</h3>
+                        {Object.entries(certifications).map(
+                          ([provider, items]) => (
+                            <div key={provider} className="cert-provider">
+                              <h4 className="cert-provider-name">{provider}</h4>
+                              <ul>
+                                {items.map((it) => (
+                                  <li key={it}>{it}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          ),
+                        )}
+                      </div>
+
+                      <div>
+                        <h3 className="cert-grid-title">Badges</h3>
+                        <div className="cert-grid">
+                          {certs.map(([name, url], index) => (
+                            <a
+                              key={name}
+                              href={url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="cert-item"
+                            >
+                              <span className="cert-index">#{index + 1}</span>
+                              <span className="cert-name">{name}</span>
+                              <span className="cert-link">
+                                View Badge{" "}
+                                <FaExternalLinkAlt aria-hidden="true" />
+                              </span>
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </details>
+                </section>
+
+                <section
+                  className="profile-grid"
+                  aria-label="Education and interests"
+                >
+                  <section
+                    className="profile-card"
+                    aria-labelledby="education-heading"
+                  >
+                    <div className="profile-head">
+                      <h2 id="education-heading" className="profile-title">
+                        Education
+                      </h2>
+                      <p className="profile-subtitle">
+                        Academic grounding in computer science, mathematics, and
+                        applied ML.
+                      </p>
+                    </div>
+                    <div className="profile-tags">
+                      {["JNU", "MCA", "GATE CS", "UGC NET"].map((tag) => (
+                        <span key={`edu-${tag}`} className="chip-muted">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="profile-body">
+                      <div className="edu-row">
+                        <p className="edu-degree">
+                          MCA, Computer Science and Applications
+                        </p>
+                        <p className="edu-meta">
+                          Jawaharlal Nehru University (2021–2023) · 7.65/9 CGPA
+                        </p>
+                      </div>
+                      <div className="edu-row">
+                        <p className="edu-degree">BSc, Computer Science</p>
+                        <p className="edu-meta">
+                          Central University of Rajasthan (2018–2021) · 7.74/10
+                          CGPA
+                        </p>
+                      </div>
+                      <p className="edu-meta">
+                        Qualified: GATE CS, UGC NET (CS)
+                      </p>
+                    </div>
+                  </section>
+
+                  <section
+                    className="profile-card"
+                    aria-labelledby="interests-heading"
+                  >
+                    <div className="profile-head">
+                      <h2 id="interests-heading" className="profile-title">
+                        Interests
+                      </h2>
+                      <p className="profile-subtitle">
+                        Outside work: strategy, teaching, and building systems
+                        end-to-end.
+                      </p>
+                    </div>
+                    <div className="interest-grid" aria-label="Interest tiles">
+                      <a
+                        className="interest-tile"
+                        href="https://www.chess.com/member/adityamahakali"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <FaChess aria-hidden="true" className="interest-icon" />
+                        <p className="interest-label">Chess</p>
+                        <p className="interest-desc">
+                          Strategy, calculation, and calm decision-making.
+                        </p>
+                      </a>
+                      <div className="interest-tile">
+                        <FaChalkboardTeacher
+                          aria-hidden="true"
+                          className="interest-icon"
+                        />
+                        <p className="interest-label">Teaching</p>
+                        <p className="interest-desc">
+                          Explaining complex systems with clarity and structure.
+                        </p>
+                      </div>
+                      <div className="interest-tile">
+                        <FaLaptopCode
+                          aria-hidden="true"
+                          className="interest-icon"
+                        />
+                        <p className="interest-label">Coding</p>
+                        <p className="interest-desc">
+                          Shipping end-to-end builds: API, retrieval, and UI.
+                        </p>
+                      </div>
+                    </div>
+                    <ul className="interest-notes" aria-label="Interest notes">
+                      <li>
+                        I enjoy mentoring, reviewing designs, and improving team
+                        delivery quality.
+                      </li>
+                      <li>
+                        I prefer systems that are observable, secure-by-default,
+                        and built for real users.
+                      </li>
+                      <li>
+                        I like turning research ideas into working products with
+                        clear metrics.
+                      </li>
+                    </ul>
+                  </section>
+                </section>
+                <br />
+                <section
+                  className="contact-card"
+                  aria-labelledby="contact-heading"
+                >
+                  <div className="profile-head">
+                    <h2 id="contact-heading" className="profile-title">
+                      Contact
+                    </h2>
+                    <p className="profile-subtitle">
+                      Open to collaborations, product builds, and AI engineering
+                      roles.
+                    </p>
+                  </div>
+                  <div className="contact-grid">
+                    <a
+                      className="contact-item"
+                      href="mailto:adityamahakali@gmail.com"
+                    >
+                      <FaEnvelope aria-hidden="true" />
+                      <div>
+                        <p className="contact-label">Email</p>
+                        <p className="contact-value">
+                          adityamahakali@gmail.com
+                        </p>
+                      </div>
+                    </a>
+                    <a
+                      className="contact-item"
+                      href="https://www.linkedin.com/in/aditya-mahakali-b81758168/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaLinkedin aria-hidden="true" />
+                      <div>
+                        <p className="contact-label">LinkedIn</p>
+                        <p className="contact-value">
+                          aditya-mahakali-b81758168
+                        </p>
+                      </div>
+                    </a>
+                    <a
+                      className="contact-item"
+                      href="https://github.com/ADITYAMAHAKALI/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <FaGithub aria-hidden="true" />
+                      <div>
+                        <p className="contact-label">GitHub</p>
+                        <p className="contact-value">@ADITYAMAHAKALI</p>
+                      </div>
+                    </a>
+                    <div
+                      className="contact-item"
+                      role="note"
+                      aria-label="Location"
+                    >
+                      <FaHome aria-hidden="true" />
+                      <div>
+                        <p className="contact-label">Location</p>
+                        <p className="contact-value">Bangalore, India</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </section>
+            </main>
+
+            <footer className="portfolio-footer">
+              <p>
+                © {new Date().getFullYear()} Aditya Mahakali. All rights
+                reserved.
+              </p>
+            </footer>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="knowledge-graph-view"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="min-h-screen w-full flex flex-col items-center justify-center"
+          >
+            <motion.div
+              className="w-full h-screen flex items-center justify-center p-4"
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="w-full max-w-6xl">
+                <div className="mb-4">
+                  <button
+                    onClick={() => setShowKnowledgeGraph(false)}
+                    className="px-4 py-2 rounded-lg bg-neutral-200 dark:bg-neutral-800 hover:bg-neutral-300 dark:hover:bg-neutral-700 transition-colors text-sm font-medium"
+                  >
+                    ← Back to Profile
+                  </button>
                 </div>
-              </a>
-              <a className="contact-item" href="https://www.linkedin.com/in/aditya-mahakali-b81758168/" target="_blank" rel="noopener noreferrer">
-                <FaLinkedin aria-hidden="true" />
-                <div>
-                  <p className="contact-label">LinkedIn</p>
-                  <p className="contact-value">aditya-mahakali-b81758168</p>
-                </div>
-              </a>
-              <a className="contact-item" href="https://github.com/ADITYAMAHAKALI/" target="_blank" rel="noopener noreferrer">
-                <FaGithub aria-hidden="true" />
-                <div>
-                  <p className="contact-label">GitHub</p>
-                  <p className="contact-value">@ADITYAMAHAKALI</p>
-                </div>
-              </a>
-              <div className="contact-item" role="note" aria-label="Location">
-                <FaHome aria-hidden="true" />
-                <div>
-                  <p className="contact-label">Location</p>
-                  <p className="contact-value">Bangalore, India</p>
-                </div>
+                <KnowledgeGraph
+                  nodes={graphData.nodes}
+                  links={graphData.links}
+                  height={600}
+                />
               </div>
-            </div>
-          </section>
-        </section>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      
-      </main>
-
-      <footer className="portfolio-footer">
-        <p>© {new Date().getFullYear()} Aditya Mahakali. All rights reserved.</p>
-      </footer>
-
-      <BottomDock
-        items={dockItems}
-        trailing={<ThemeToggle value={mode} onChange={setMode} />}
-      />
+      <BottomDock items={dockItems} />
     </div>
   );
 }
