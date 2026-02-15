@@ -737,7 +737,7 @@ export default function Page() {
                 />
               </button>
             </div>
-            <p className="hero-kicker">AI/ML Engineer at IBM</p>
+            <p className="hero-kicker">Senior AI/ML Engineer</p>
             <h1 className="hero-title">Aditya Mahakali</h1>
             <p className="hero-tagline">
               Building prodcution AI systems with reliable backends and governed
