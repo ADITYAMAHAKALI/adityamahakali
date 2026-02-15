@@ -1,7 +1,7 @@
 <h1 align="center">Hey there! 👋 I'm Aditya Mahakali</h1>
 
 <p align="center">
-  🧠 AI/ML Engineer @ <strong>IBM</strong> <br>
+  🧠 Senior AI/ML Engineer <br>
   🔍 Full-stack AI Engineer | RAG, Agents, LLMs, Search <br>
   🚀 Solving real-world problems with Machine Learning and Generative AI <br>
   💡 Passionate about building AI systems that actually ship and scale
