@@ -12,7 +12,9 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ error: "NVIDIA_NIM_API_KEY is not configured on the server." }), { status: 500 });
   }
 
-  const { messages } = await req.json();
+  const { messages: allMessages } = await req.json();
+  // Keep only the last 5 exchanges (10 messages) to limit token usage
+  const messages = allMessages.slice(-10);
   
   // Read README for base context
   let readmeContext = "";
@@ -83,7 +85,7 @@ NEXT_QUESTIONS:
     });
 
     const result = streamText({
-      model: nvidia('stepfun-ai/step-3.5-flash'),
+      model: nvidia('moonshotai/kimi-k2-instruct'),
       system: fullContext,
       messages,
     });
