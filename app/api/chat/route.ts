@@ -1,4 +1,4 @@
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createOpenAI } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { promises as fs } from 'fs';
 import path from 'path';
@@ -7,6 +7,11 @@ import path from 'path';
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
+  const apiKey = process.env.NVIDIA_NIM_API_KEY;
+  if (!apiKey) {
+    return new Response(JSON.stringify({ error: "NVIDIA_NIM_API_KEY is not configured on the server." }), { status: 500 });
+  }
+
   const { messages } = await req.json();
   
   // Read README for base context
@@ -64,7 +69,7 @@ IMPORTANT INSTRUCTIONS:
 - Base all answers strictly on the knowledge provided. If you don't know, politely admit it.
 - END EVERY SINGLE CONVERSATION RESPONSE by encouraging the user to connect on LinkedIn.
 - DO NOT hallucinate info that isn't provided here.
-- AT THE VERY END OF YOUR RESPONSE, always provide exactly 3 suggested next questions. These questions MUST be highly contextual and directly related to the specific topic just discussed in the user's last message. Use exactly this format:
+- AT THE VERY END OF YOUR RESPONSE, always provide exactly 3 suggested next questions. These questions MUST be highly contextual and directly related to the specific topic just discussed and aditya's work. Use exactly this format:
 NEXT_QUESTIONS:
 - [Question 1]
 - [Question 2]
@@ -72,12 +77,13 @@ NEXT_QUESTIONS:
 `;
 
   try {
-    const google = createGoogleGenerativeAI({
-      apiKey: process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY || '',
+    const nvidia = createOpenAI({
+      apiKey,
+      baseURL: 'https://integrate.api.nvidia.com/v1',
     });
 
     const result = streamText({
-      model: google('gemini-2.5-flash'), // Gemini 2.5 Flash is highly capable and free-tier friendly
+      model: nvidia('stepfun-ai/step-3.5-flash'),
       system: fullContext,
       messages,
     });

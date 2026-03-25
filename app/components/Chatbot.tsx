@@ -13,7 +13,11 @@ export default function Chatbot() {
     api: "/api/chat",
     onError: (error) => {
       console.error("Chat error:", error);
-      alert("Please ensure your GEMINI_API_KEY is set in .env.local!");
+      alert(
+        error?.message
+          ? `Chat error: ${error.message}`
+          : "Something went wrong. Please try again in a moment."
+      );
     }
   });
 
