@@ -23,7 +23,7 @@
 
 I specialize in crafting intelligent systems using modern AI techniques. My work spans enterprise-grade LLM applications, Retrieval-Augmented Generation (RAG), agentic workflows, vector search, and scalable backend APIs.
 
-* 🔭 Solving AI problems for healthcare, banking, and telecom clients @ IBM  
+* 🔭 Independent Consulting AI Engineer solving AI problems for enterprise clients  
 * 🧱 Strong full-stack background: FastAPI, Spring Boot, React  
 * 📚 Research interests: RAG architectures, multi-agent collaboration, KG-RAG  
 * 📫 Email: **[adityamahakali@gmail.com](mailto:adityamahakali@gmail.com)**  
@@ -52,9 +52,15 @@ A modular, probabilistic, and research-grounded AI content detection library.
 
 ## 🚀 Experience
 
+### **Independent Consulting AI Engineer**
+**Independent**  
+*April 2026 – Present*
+
+- Building custom AI solutions, RAG systems, and agentic workflows for enterprise clients.
+
 ### **AI Engineer**
 **IBM — Bangalore**  
-*August 2023 – Present*
+*August 2023 – April 2026*
 
 - Delivered full-stack Generative AI MVPs using Watsonx for 12+ enterprise clients  
 - Architected LLM-powered assistants, summarizers, and agentic systems  

@@ -342,7 +342,7 @@ const experienceJourney = [
   {
     role: "AI/ML Engineer",
     company: "IBM, Bangalore",
-    period: "Aug 2023 - Present",
+    period: "Aug 2023 - Apr 2026",
     stages: [
       {
         phase: "Start",
@@ -420,6 +420,20 @@ const experienceJourney = [
           "Created Deal Velocity Manager, a multi-agent Salesforce workflow assistant; won 2nd place in watsonx Challenge 2025.",
         stack: "Salesforce, agentic automation",
         metric: "2nd Place Winner",
+      },
+    ],
+  },
+  {
+    role: "Independent Consulting AI Engineer",
+    company: "Independent",
+    period: "Apr 2026 - Present",
+    stages: [
+      {
+        phase: "Consulting",
+        title: "Independent AI Consulting",
+        detail:
+          "Building custom AI solutions, RAG systems, and agentic workflows for enterprise clients.",
+        stack: "LLMs, RAG, Agents, Full-Stack AI",
       },
     ],
   },

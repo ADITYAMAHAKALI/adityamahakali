@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { baseUrl } from "./sitemap";
+import Chatbot from "./components/Chatbot";
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
     template: "%s | Aditya Mahakali",
   },
   description:
-    "AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Expert in building production AI systems with LLMs, embeddings, and retrieval engineering. Portfolio showcasing real-world AI/ML projects.",
+    "Independent Consulting AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Expert in building production AI systems with LLMs, embeddings, and retrieval engineering. Portfolio showcasing real-world AI/ML projects.",
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Aditya Mahakali - AI Engineer | ML & GenAI Specialist",
     description:
-      "AI Engineer at IBM specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Building production AI systems with LLMs and retrieval engineering.",
+      "Independent Consulting AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Building production AI systems with LLMs and retrieval engineering.",
     images: [`${baseUrl}/og-image.png`],
     creator: "@adityamahakali",
   },
@@ -151,8 +152,8 @@ export default function RootLayout({
     email: "adityamahakali@gmail.com",
     worksFor: {
       "@type": "Organization",
-      name: "IBM",
-      url: "https://www.ibm.com",
+      name: "Independent Consultant",
+      url: baseUrl,
     },
     alumniOf: {
       "@type": "EducationalOrganization",
@@ -225,6 +226,7 @@ export default function RootLayout({
           <main className="flex-1 w-full">{children}</main>
           <Analytics />
           <SpeedInsights />
+          <Chatbot />
         </div>
       </body>
     </html>
