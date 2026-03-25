@@ -1884,6 +1884,16 @@ body {
     0 0 48px rgba(110, 172, 218, 0.32),
     0 0 84px rgba(110, 172, 218, 0.16);
   z-index: 60;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Hide dock on mobile when chatbot is open */
+@media (max-width: 639px) {
+  body.chatbot-open .mobile-dock {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(20px);
+  }
 }
 
 .dock-link {

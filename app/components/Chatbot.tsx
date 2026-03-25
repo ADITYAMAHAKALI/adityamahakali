@@ -23,6 +23,16 @@ export default function Chatbot() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Hide dock on mobile when chatbot is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add("chatbot-open");
+    } else {
+      document.body.classList.remove("chatbot-open");
+    }
+    return () => document.body.classList.remove("chatbot-open");
+  }, [isOpen]);
+
   const handleQuickPrompt = (text: string) => {
     if (handleInputChange) {
       handleInputChange({ target: { value: text } } as any);
@@ -34,7 +44,7 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
+    <div className="fixed bottom-24 sm:bottom-6 right-4 sm:right-6 z-50 flex flex-col items-end">
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -42,7 +52,7 @@ export default function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="mb-4 w-[90vw] sm:w-[450px] md:w-[600px] h-[600px] max-h-[80vh] bg-[var(--bg)] border border-[var(--line-soft)] rounded-2xl shadow-2xl flex flex-col overflow-hidden will-change-transform"
+            className="fixed inset-0 sm:relative sm:inset-auto mb-0 sm:mb-4 w-full sm:w-[450px] md:w-[600px] h-full sm:h-[600px] sm:max-h-[80vh] bg-[var(--bg)] border-0 sm:border border-[var(--line-soft)] rounded-none sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden will-change-transform z-50"
           >
             <div className="p-4 bg-[var(--bg-elev)] border-b border-[var(--line-soft)] flex justify-between items-center">
               <div className="flex items-center gap-2">
