@@ -12,7 +12,7 @@ tags:
 
 Context engineering is not about packing every scrap of data into the prompt. It's about selecting the right evidence to satisfy the user's job to be done. I start by rewriting the request as:
 
-> *"The assistant must help the user accomplish X by deciding Y while respecting constraints Z."*
+> _"The assistant must help the user accomplish X by deciding Y while respecting constraints Z."_
 
 When the intent is crisp, the rest of the pipeline falls into place.
 
@@ -20,10 +20,10 @@ When the intent is crisp, the rest of the pipeline falls into place.
 
 I design "ladders" of context where each rung adds fidelity:
 
-1. **Global policies** — governance, tone, legal guardrails.
-2. **Session state** — what happened in this conversation so far.
-3. **Task-specific documents** — knowledge bases, code snippets, analytics.
-4. **Adaptive retrieval** — targeted lookups triggered only when needed.
+1. **Global policies** : governance, tone, legal guardrails.
+2. **Session state** : what happened in this conversation so far.
+3. **Task-specific documents** : knowledge bases, code snippets, analytics.
+4. **Adaptive retrieval** : targeted lookups triggered only when needed.
 
 By making each rung optional, the system avoids sending redundant information when the answer is obvious.
 

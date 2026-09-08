@@ -20,9 +20,9 @@ Autonomous agents sound magical until you realize how often they hallucinate, ov
 
 The most effective teams treat agents as products with layered responsibilities:
 
-- **Cognition layer** — prompt templates, system messages, and fine-tuned policies that align the model with business goals.
-- **Memory layer** — vector stores, relational databases, and scratch pads that retain relevant context between steps.
-- **Action layer** — tool definitions, API wrappers, and deterministic code that convert intent into execution.
+- **Cognition layer** : prompt templates, system messages, and fine-tuned policies that align the model with business goals.
+- **Memory layer** : vector stores, relational databases, and scratch pads that retain relevant context between steps.
+- **Action layer** : tool definitions, API wrappers, and deterministic code that convert intent into execution.
 
 Each layer deserves unit tests and observability. When I instrument tool calls with tracing, I can replay entire agent runs and spot brittle prompts before they reach customers.
 
@@ -55,16 +55,15 @@ Each layer deserves unit tests and observability. When I instrument tool calls w
 </tbody>
 </table>
 
-
 These patterns prevent "cascade failure" where one unexpected model response knocks the entire workflow offline.
 
 ## Shipping agents with humans in the loop
 
 Autonomy does not mean absence of humans. I design stages of review:
 
-1. **Draft** — the agent prepares a plan, citing sources and assumptions.
-2. **Execute** — it runs constrained tasks, logging every decision.
-3. **Review** — a human approves, edits, or re-runs steps with additional context.
+1. **Draft** : the agent prepares a plan, citing sources and assumptions.
+2. **Execute** : it runs constrained tasks, logging every decision.
+3. **Review** : a human approves, edits, or re-runs steps with additional context.
 
 The agent accelerates work while people stay accountable for outcomes.
 

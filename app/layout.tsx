@@ -1,9 +1,33 @@
 import "./global.css";
 import type { Metadata } from "next";
+import { IBM_Plex_Mono, IBM_Plex_Serif, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { baseUrl } from "./sitemap";
 import Chatbot from "./components/Chatbot";
+import GlobalDock from "./components/GlobalDock";
+
+const plexSerif = IBM_Plex_Serif({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-sans",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
@@ -157,7 +181,7 @@ export default function RootLayout({
     },
     alumniOf: {
       "@type": "EducationalOrganization",
-      name: "Your University", // Update with your actual university
+      name: "Jawaharlal Nehru University",
     },
     sameAs: [
       "https://github.com/ADITYAMAHAKALI",
@@ -203,7 +227,15 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="en" className={cx("theme-dark")}>
+    <html
+      lang="en"
+      className={cx(
+        "theme-dark",
+        plexSerif.variable,
+        plexMono.variable,
+        inter.variable,
+      )}
+    >
       <head>
         <script
           type="application/ld+json"
@@ -218,15 +250,11 @@ export default function RootLayout({
       </head>
       <body className="antialiased w-full">
         <div className="flex flex-col min-h-screen">
-          {/* <header className="w-full px-6 py-4 border-b border-gray-200 dark:border-gray-800">
-            <div className="max-w-7xl mx-auto">
-              <Navbar />
-            </div>
-          </header> */}
           <main className="flex-1 w-full">{children}</main>
           <Analytics />
           <SpeedInsights />
           <Chatbot />
+          <GlobalDock />
         </div>
       </body>
     </html>

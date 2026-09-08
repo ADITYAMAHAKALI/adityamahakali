@@ -3,19 +3,21 @@ import { streamText } from 'ai';
 import { promises as fs } from 'fs';
 import path from 'path';
 
+import { baseUrl } from '@/app/sitemap';
+
 // Optional: allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
-  const apiKey = process.env.NVIDIA_NIM_API_KEY;
+  const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: "NVIDIA_NIM_API_KEY is not configured on the server." }), { status: 500 });
+    return new Response(JSON.stringify({ error: "OPENROUTER_API_KEY is not configured on the server." }), { status: 500 });
   }
 
   const { messages: allMessages } = await req.json();
   // Keep only the last 5 exchanges (10 messages) to limit token usage
   const messages = allMessages.slice(-10);
-  
+
   // Read README for base context
   let readmeContext = "";
   try {
@@ -30,6 +32,8 @@ You are Aditya Mahakali's personal AI agent running on his portfolio website.
 Your role is to answer questions about Aditya to recruiters, clients, and peers.
 You MUST ALWAYS answer in the first-person, as if you are Aditya's AI representative (e.g., "Aditya worked on...", "His skills include..."). Or you can answer in first person as Aditya himself if it fits, but it's often better to say "I am Aditya's AI agent..."
 
+Aditya is positioning himself as an Applied AI Architect: he builds production AI systems for businesses and pitches to both recruiters (full-time roles) and enterprise clients/founders (consulting engagements) equally.
+
 Here is EVERYTHING available on his website:
 ===================================
 README INFO:
@@ -37,18 +41,22 @@ ${readmeContext}
 ===================================
 MORE DETAILED PAGE DATA (from his website timeline & projects):
 
-[EXPERIENCE]
-1. Independent Consulting AI Engineer @ Independent (Apr 2026 - Present)
-- Building custom AI solutions, RAG systems, and agentic workflows for enterprise clients.
-- Stack: LLMs, RAG, Agents, Full-Stack AI
+[EXPERIENCE] (newest first)
+1. AI Architect @ Aintropy (aintropy.ai) (Apr 2026 - Present)
+- Jul 2026 - Present (Architecture phase): Architecting and implementing an agentic, video-first cognitive pipeline spanning video, text, and structured data. Designed scalable backend architecture for AI services, a client-side SDK, and developer experience.
+- Apr 2026 - Jul 2026 (Foundations phase, as Senior AI/ML Engineer): Worked on foundational problems in enterprise data cognition across unstructured data (video, images, text) and structured data (tables); built a multi-modal RAG engine.
+- Stack: Knowledge Engineering, Video RAG, Agentic pipelines, SDK design, Multi-modal RAG
 
 2. AI/ML Engineer @ IBM, Bangalore (Aug 2023 - Apr 2026)
 - Built Conversational RAG (Banking MVP) with 85% first-call resolution.
 - Built FDA product search + assistant (Life Sciences) with metadata summarization.
 - Built RAG APIs over 100k+ enterprise networking docs.
 - Built Secure NL2SQL microservices for enterprise analytics.
+- Automated ontology creation and NL2Cypher retrieval pipelines for Neo4j-backed RAG (VKG).
 - Co-authored SEARCHD paper on retrieval tuning.
+- Built Shinigami Eyes, a VS Code vulnerability-detection extension - Honorable Mention, watsonx Challenge 2024.
 - Built Deal Velocity Manager (Salesforce agent) - 2nd place watsonx Challenge 2025.
+- Built multimodal generation and agentic orchestration workflows for internal acceleration and production pilots.
 
 3. Software Development Intern @ Hughes Systique Corporation, Gurugram (Jan 2023 - Aug 2023)
 - Built BugPilot, an internal bug tracker in Spring Boot/React used by 3 teams.
@@ -61,6 +69,9 @@ MORE DETAILED PAGE DATA (from his website timeline & projects):
 - MedBot HyDe: Hypothetical document embeddings for medical QA.
 - Daily Paper Summarizer: Agentic pipeline to ingest, summarize, and publish AI papers.
 - Veridex (Open Source): Modular, probabilistic AI content detection library.
+
+[BLOG]
+- Aditya also publishes long-form notes and write-ups at /blog on business-outcome-focused AI topics (where AI creates leverage for businesses, and what adoption costs).
 
 [SKILLS]
 ML/GenAI: Machine Learning, Deep Learning, Generative AI, NLP, Computer Vision, AI Search, Retrieval (RAG), Agents, Knowledge Graphs, Embeddings, Re-ranking.
@@ -79,13 +90,19 @@ NEXT_QUESTIONS:
 `;
 
   try {
-    const nvidia = createOpenAI({
+    const openrouter = createOpenAI({
       apiKey,
-      baseURL: 'https://integrate.api.nvidia.com/v1',
+      baseURL: 'https://openrouter.ai/api/v1',
+      headers: {
+        'HTTP-Referer': baseUrl,
+        'X-Title': 'Aditya Mahakali Portfolio',
+      },
     });
 
+    const model = process.env.OPENROUTER_MODEL || 'thinkingmachines/inkling:free';
+
     const result = streamText({
-      model: nvidia('moonshotai/kimi-k2-instruct'),
+      model: openrouter(model),
       system: fullContext,
       messages,
     });

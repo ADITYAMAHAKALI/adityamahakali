@@ -57,6 +57,20 @@ function RoundedImage({ alt, className, ...rest }: React.ComponentProps<typeof I
   return <Image alt={alt ?? ''} className={composedClassName} {...rest} />;
 }
 
+function Video({ src, title }: { src: string; title?: string }) {
+  return (
+    <div className="mdx-video">
+      <iframe
+        src={src}
+        title={title ?? 'Embedded video'}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+  );
+}
+
 const TOKEN_TYPES = [
   'identifier',
   'keyword',
@@ -190,6 +204,7 @@ const components = {
   h5: createHeading(5),
   h6: createHeading(6),
   Image: RoundedImage,
+  Video,
   a: CustomLink,
   code: Code,
   Table,
