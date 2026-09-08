@@ -99,7 +99,7 @@ NEXT_QUESTIONS:
       },
     });
 
-    const model = process.env.OPENROUTER_MODEL || 'thinkingmachines/inkling:free';
+    const model = process.env.OPENROUTER_MODEL || 'moonshotai/kimi-k2';
 
     const result = streamText({
       model: openrouter(model),

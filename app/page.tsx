@@ -44,6 +44,7 @@ import { GiArtificialIntelligence } from "react-icons/gi";
 import pp from "./images/dp.jpeg";
 import { Skill } from "./components/SkillCard";
 import SkillsStrips from "./components/SkillsStrips";
+import LinkedInFeed from "./components/LinkedInFeed";
 import ThemeToggle from "./components/ThemeToggle";
 import { useTheme } from "./components/useTheme";
 import KnowledgeGraph, {
@@ -1240,6 +1241,18 @@ export default function Page() {
                     </div>
             
                   </section>
+                </section>
+
+                <section
+                  className="linkedin-section"
+                  aria-labelledby="linkedin-heading"
+                >
+                  <h2 id="linkedin-heading" className="section-heading">
+                    Recent on LinkedIn
+                  </h2>
+                  <div className="linkedin-embed">
+                    <LinkedInFeed />
+                  </div>
                 </section>
 
                 <section

@@ -39,7 +39,7 @@ Research-grounded and production-ready at once: Aditya has co-authored published
 
 - Built on Next.js 15 / React 19 / Tailwind 4 (alpha) / Framer Motion / D3 (for the knowledge graph) / Vercel (hosting, Analytics, Speed Insights).
 - Blog content is Markdown with frontmatter, rendered via `next-mdx-remote`.
-- Chatbot backend currently uses OpenRouter (model: `thinkingmachines/inkling:free`, configurable via the `OPENROUTER_MODEL` env var; recently migrated from NVIDIA NIM), via the Vercel AI SDK.
+- Chatbot backend currently uses OpenRouter (configured model via `OPENROUTER_MODEL` env var: `google/gemma-4-31b-it:free`; code fallback if the env var is unset: `moonshotai/kimi-k2`, a paid-but-cheap model verified reliably working; recently migrated from NVIDIA NIM). Note: OpenRouter's `:free` model variants are shared-pool and unreliable for a production chatbot — observed failure modes as of Sep 2026: `thinkingmachines/inkling:free` hard-gates with a 403 (agentic-harness clients only), `poolside/laguna-s-2.1:free` consistently 429'd (fully saturated), `google/gemma-4-31b-it:free` is intermittent (roughly 1 success in 3 requests in testing). Verify directly against the OpenRouter API before switching models — the Vercel AI SDK masks the real error as "An error occurred." If reliability matters more than $0 cost, use the kimi-k2 fallback instead.
 - Real content only: all experience, project, certification, and blog data in the codebase is factual and sourced from Aditya's actual work : no placeholder or fabricated claims should be introduced.
 
 ## Brand Commitments
