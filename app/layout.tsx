@@ -4,7 +4,8 @@ import { IBM_Plex_Mono, IBM_Plex_Serif, Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { baseUrl } from "./sitemap";
-import Chatbot from "./components/Chatbot";
+// Chatbot temporarily disabled — see render below.
+// import Chatbot from "./components/Chatbot";
 import GlobalDock from "./components/GlobalDock";
 
 const plexSerif = IBM_Plex_Serif({
@@ -253,7 +254,7 @@ export default function RootLayout({
           <main className="flex-1 w-full">{children}</main>
           <Analytics />
           <SpeedInsights />
-          <Chatbot />
+          {/* <Chatbot /> */}
           <GlobalDock />
         </div>
       </body>
