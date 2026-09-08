@@ -13,6 +13,7 @@ export interface PostFrontmatter {
   updatedAt?: string;
   tags?: unknown;
   draft?: boolean;
+  coverImage?: string;
   [key: string]: unknown;
 }
 

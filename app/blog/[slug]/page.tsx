@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
 import { CustomMDX } from '@/app/components/mdx';
@@ -58,40 +59,50 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     day: 'numeric',
   });
 
+  const coverImage =
+    typeof post.frontmatter.coverImage === 'string'
+      ? post.frontmatter.coverImage
+      : undefined;
+
   return (
-    <article className="mx-auto max-w-3xl space-y-8 py-12">
-      <Link
-        href="/blog"
-        className="inline-flex items-center text-sm font-medium text-indigo-600 transition hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300"
-      >
+    <article className="blog-post">
+      <Link href="/blog" className="blog-post-back">
         ← Back to all posts
       </Link>
-      <header className="space-y-4">
-        <h1 className="text-4xl font-semibold leading-tight text-neutral-900 dark:text-neutral-50">
-          {post.title}
-        </h1>
-        <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-600 dark:text-neutral-300">
+      <header className="blog-post-header">
+        <h1 className="blog-post-title">{post.title}</h1>
+        <div className="blog-post-meta">
           <time dateTime={post.publishedAt}>{formattedPublishedDate}</time>
-          <span aria-hidden="true">•</span>
+          <span aria-hidden="true">·</span>
           <span>{post.readingTime}</span>
           {post.tags.length > 0 && (
-            <ul className="flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <li
-                  key={tag}
-                  className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-300"
-                >
-                  #{tag}
-                </li>
-              ))}
-            </ul>
+            <>
+              <span aria-hidden="true">·</span>
+              <span>{post.tags.join(' / ')}</span>
+            </>
           )}
         </div>
       </header>
 
-      <div className="prose prose-neutral max-w-none dark:prose-invert">
+      {coverImage && (
+        <div className="blog-post-cover">
+          <Image
+            src={coverImage}
+            alt={post.title}
+            fill
+            sizes="(min-width: 768px) 68ch, 100vw"
+            priority
+          />
+        </div>
+      )}
+
+      <div className="prose blog-post-body">
         <CustomMDX source={post.content} />
       </div>
+
+      <section id="comments" className="blog-comments" aria-label="Comments">
+        {/* Giscus (GitHub Discussions) mounts here once enabled. */}
+      </section>
     </article>
   );
 }

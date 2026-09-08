@@ -30,9 +30,9 @@ Each block becomes an independently testable unit with its own CI checks.
 
 ## Training accelerators worth adopting
 
-- **Labeling studio** — invest in tight feedback loops between subject matter experts and annotators. The integrated labeling tools reduce context switching.
-- **Reusable skill packs** — IBM ships pre-trained assets for invoices, claims, and KYC docs. Customize them rather than starting from scratch.
-- **Confidence scoring dashboards** — business stakeholders understand sliders better than probability distributions. Translate scores into thresholds they can tweak.
+- **Labeling studio** : invest in tight feedback loops between subject matter experts and annotators. The integrated labeling tools reduce context switching.
+- **Reusable skill packs** : IBM ships pre-trained assets for invoices, claims, and KYC docs. Customize them rather than starting from scratch.
+- **Confidence scoring dashboards** : business stakeholders understand sliders better than probability distributions. Translate scores into thresholds they can tweak.
 
 ## Governance is not optional
 

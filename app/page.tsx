@@ -38,15 +38,12 @@ import {
   SiFastapi,
   SiFlask,
   SiGraphql,
-  SiLeetcode,
   SiSpringboot,
 } from "react-icons/si";
 import { GiArtificialIntelligence } from "react-icons/gi";
 import pp from "./images/dp.jpeg";
 import { Skill } from "./components/SkillCard";
-import AccordionSection from "./components/AccordionSection";
 import SkillsStrips from "./components/SkillsStrips";
-import BottomDock, { DockItem } from "./components/BottomDock";
 import ThemeToggle from "./components/ThemeToggle";
 import { useTheme } from "./components/useTheme";
 import KnowledgeGraph, {
@@ -268,135 +265,52 @@ function buildGraphData(input: {
   return { nodes, links };
 }
 
-const dockItems: DockItem[] = [
-  { label: "Home", href: "/", icon: FaHome },
-  {
-    label: "GitHub",
-    href: "https://github.com/ADITYAMAHAKALI/",
-    icon: FaGithub,
-    external: true,
-  },
-  {
-    label: "LinkedIn",
-    href: "https://www.linkedin.com/in/aditya-mahakali-b81758168/",
-    icon: FaLinkedin,
-    external: true,
-  },
-  {
-    label: "Email",
-    href: "mailto:adityamahakali@gmail.com",
-    icon: FaEnvelope,
-    external: true,
-  },
-  {
-    label: "Resume",
-    href: "https://drive.google.com/file/d/1hPDU5O51nLcL9-BfaHTtl46fYszLzg6Y/view",
-    icon: FaBook,
-    external: true,
-  },
-  {
-    label: "LeetCode",
-    href: "https://leetcode.com/adityamahakali/",
-    icon: SiLeetcode,
-    external: true,
-  },
-];
-
 const experienceJourney = [
   {
-    role: "Software Development Intern",
-    company: "Hughes Systique Corporation, Gurugram",
-    period: "Jan 2023 - Aug 2023",
+    role: "AI Architect",
+    company: "Aintropy (aintropy.ai)",
+    companyUrl: "https://aintropy.ai",
+    period: "Apr 2026 - Present",
     stages: [
       {
-        phase: "Learning Phase",
-        title: "Full-stack software development",
+        phase: "Architecture",
+        date: "Jul 2026 - Present",
+        title: "Agentic, video-first cognitive pipeline",
         detail:
-          "Hands-on progression through backend, frontend, delivery, and app security.",
-        stack: "Spring Boot -> Angular -> Docker -> Security",
+          "Architecting and implementing an agentic, video-first cognitive pipeline spanning video, text, and structured data. Designed scalable backend architecture for AI services, a client-side SDK, and developer experience.",
+        stack:
+          "Knowledge Engineering, Video RAG, Agentic pipelines, SDK design",
       },
       {
-        phase: "Pilot Project",
-        title: "Built BugPilot",
+        phase: "Foundations",
+        date: "Apr 2026 - Jul 2026",
+        title: "Multi-modal RAG engine for enterprise data cognition",
         detail:
-          "Built a company-internal bug tracker to report, triage, and track issues across projects; adopted by multiple internal teams.",
-        stack: "Spring Boot, React, Docker",
-        metric: "Adopted by 3 internal teams",
-      },
-      {
-        phase: "Switch",
-        title: "Moved to NLP and LLMs",
-        detail:
-          "Started building LLM workflows on private enterprise data and vector databases.",
-        stack: "Transformers, Milvus, Chroma, Weaviate",
-      },
-      {
-        phase: "RAG Build",
-        title: "Built a RAG system prototype",
-        detail:
-          "Implemented retrieval + generation pipelines and evaluation loops for internal pilots.",
-        stack: "OpenAI API, LangChain, Weaviate",
+          "Worked on foundational problems in enterprise data cognition across unstructured data (video, images, text) and structured data (tables); built a multi-modal RAG engine.",
+        stack: "Multi-modal RAG, Video/Image/Text, Structured data",
       },
     ],
   },
   {
     role: "AI/ML Engineer",
     company: "IBM, Bangalore",
+    companyUrl: "https://www.ibm.com",
     period: "Aug 2023 - Apr 2026",
     stages: [
       {
-        phase: "Start",
-        title: "Conversational RAG (Banking MVP)",
-        detail:
-          "Built a conversational RAG assistant with query modification + hybrid retrieval and integrated it into a React UI with deep linking.",
-        stack: "watsonx.ai, Watson Assistant, React, Flask, Docker, Milvus",
-        metric: "85% first-call resolution",
-      },
-      {
-        phase: "Search",
-        title: "FDA product search + assistant (Life Sciences)",
-        detail:
-          "Summarized FDA documents to create high-signal metadata and improved retrieval quality for a large US retailer.",
-        stack: "Solr, RAG, summarization",
-        metric: "Relevance +25%",
-      },
-      {
-        phase: "Scale",
-        title: "Technical QA assistant over 100k+ documents",
-        detail:
-          "Built RAG APIs over a 100k+ corpus with hybrid dense/sparse/BM25 retrieval, domain query modification, and tuned embeddings.",
-        stack: "Elasticsearch, dense/sparse search, custom embeddings",
-        metric: "56% -> 77% answer accuracy",
-      },
-      {
-        phase: "Graphs",
-        title: "Knowledge-graph RAG (VKG)",
-        detail:
-          "Automated ontology creation and built NL2Cypher retrieval pipelines for Neo4j-backed RAG.",
-        stack: "Neo4j, NL2Cypher, knowledge graphs",
-      },
-      {
-        phase: "Research",
-        title: "Co-authored SEARCHD",
-        detail:
-          "Contributed to retrieval strategy research and practical search system design for enterprise AI delivery.",
-        stack: "Retrieval engineering, RAG",
-      },
-      {
         phase: "Hackathon",
-        title: "Shinigami Eyes (VS Code extension)",
+        title: "Hackathon: DVM",
         detail:
-          "Built a VS Code extension to detect module-level and file-level vulnerabilities; received honorable mention in watsonx Challenge 2024.",
-        stack: "LLMs, VS Code extension",
-        metric: "Honorable Mention",
+          "Created Deal Velocity Manager, a multi-agent Salesforce workflow assistant; won 2nd place in watsonx Challenge 2025.",
+        stack: "Salesforce, agentic automation",
+        metric: "2nd Place Winner",
       },
       {
-        phase: "Production",
-        title: "Secure NL2SQL for enterprise analytics",
+        phase: "Multimodal",
+        title: "Multi-modal and agentic systems",
         detail:
-          "Built NL2SQL microservices with automated metadata dictionary + disambiguation; shipped RBAC and prompt-injection defenses for business users to talk to data.",
-        stack: "FastAPI, watsonx.ai, RBAC, guardrails",
-        metric: "65% -> 88% query success",
+          "Built multimodal generation workflows and agentic orchestration for internal acceleration and production pilots.",
+        stack: "Multimodal LLMs, agents",
       },
       {
         phase: "Enterprise",
@@ -407,33 +321,95 @@ const experienceJourney = [
         metric: "100k+ documents",
       },
       {
-        phase: "Multimodal",
-        title: "Multi-modal and agentic systems",
+        phase: "Production",
+        title: "Secure NL2SQL for enterprise analytics",
         detail:
-          "Built multimodal generation workflows and agentic orchestration for internal acceleration and production pilots.",
-        stack: "Multimodal LLMs, agents",
+          "Built NL2SQL microservices with automated metadata dictionary + disambiguation; shipped RBAC and prompt-injection defenses for business users to talk to data.",
+        stack: "FastAPI, watsonx.ai, RBAC, guardrails",
+        metric: "65% -> 88% query success",
       },
       {
         phase: "Hackathon",
-        title: "Hackathon: DVM",
+        title: "Shinigami Eyes (VS Code extension)",
         detail:
-          "Created Deal Velocity Manager, a multi-agent Salesforce workflow assistant; won 2nd place in watsonx Challenge 2025.",
-        stack: "Salesforce, agentic automation",
-        metric: "2nd Place Winner",
+          "Built a VS Code extension to detect module-level and file-level vulnerabilities; received honorable mention in watsonx Challenge 2024.",
+        stack: "LLMs, VS Code extension",
+        metric: "Honorable Mention",
+      },
+      {
+        phase: "Research",
+        title: "Co-authored SEARCHD",
+        detail:
+          "Contributed to retrieval strategy research and practical search system design for enterprise AI delivery.",
+        stack: "Retrieval engineering, RAG",
+      },
+      {
+        phase: "Graphs",
+        title: "Knowledge-graph RAG (VKG)",
+        detail:
+          "Automated ontology creation and built NL2Cypher retrieval pipelines for Neo4j-backed RAG.",
+        stack: "Neo4j, NL2Cypher, knowledge graphs",
+      },
+      {
+        phase: "Scale",
+        title: "Technical QA assistant over 100k+ documents",
+        detail:
+          "Built RAG APIs over a 100k+ corpus with hybrid dense/sparse/BM25 retrieval, domain query modification, and tuned embeddings.",
+        stack: "Elasticsearch, dense/sparse search, custom embeddings",
+        metric: "56% -> 77% answer accuracy",
+      },
+      {
+        phase: "Search",
+        title: "FDA product search + assistant (Life Sciences)",
+        detail:
+          "Summarized FDA documents to create high-signal metadata and improved retrieval quality for a large US retailer.",
+        stack: "Solr, RAG, summarization",
+        metric: "Relevance +25%",
+      },
+      {
+        phase: "Start",
+        title: "Conversational RAG (Banking MVP)",
+        detail:
+          "Built a conversational RAG assistant with query modification + hybrid retrieval and integrated it into a React UI with deep linking.",
+        stack: "watsonx.ai, Watson Assistant, React, Flask, Docker, Milvus",
+        metric: "85% first-call resolution",
       },
     ],
   },
   {
-    role: "Independent Consulting AI Engineer",
-    company: "Independent",
-    period: "Apr 2026 - Present",
+    role: "Software Development Intern",
+    company: "Hughes Systique Corporation, Gurugram",
+    companyUrl: "https://www.hsc.com/",
+    period: "Jan 2023 - Aug 2023",
     stages: [
       {
-        phase: "Consulting",
-        title: "Independent AI Consulting",
+        phase: "RAG Build",
+        title: "Built a RAG system prototype",
         detail:
-          "Building custom AI solutions, RAG systems, and agentic workflows for enterprise clients.",
-        stack: "LLMs, RAG, Agents, Full-Stack AI",
+          "Implemented retrieval + generation pipelines and evaluation loops for internal pilots.",
+        stack: "OpenAI API, LangChain, Weaviate",
+      },
+      {
+        phase: "Switch",
+        title: "Moved to NLP and LLMs",
+        detail:
+          "Started building LLM workflows on private enterprise data and vector databases.",
+        stack: "Transformers, Milvus, Chroma, Weaviate",
+      },
+      {
+        phase: "Pilot Project",
+        title: "Built BugPilot",
+        detail:
+          "Built a company-internal bug tracker to report, triage, and track issues across projects; adopted by multiple internal teams.",
+        stack: "Spring Boot, React, Docker",
+        metric: "Adopted by 3 internal teams",
+      },
+      {
+        phase: "Learning Phase",
+        title: "Full-stack software development",
+        detail:
+          "Hands-on progression through backend, frontend, delivery, and app security.",
+        stack: "Spring Boot -> Angular -> Docker -> Security",
       },
     ],
   },
@@ -732,47 +708,43 @@ export default function Page() {
               <ThemeToggle value={mode} onChange={setMode} />
             </div>
           </div>
-          <div className="hero-center">
-            <div className="hero-avatar-wrapper">
-              <button
-                type="button"
-                className="hero-avatar-button"
-                onClick={() => setShowKnowledgeGraph(!showKnowledgeGraph)}
-                aria-label="Toggle knowledge graph view"
-                title="Explore my knowledge graph"
-              >
-                <Image
-                  src={pp}
-                  alt="Aditya Mahakali"
-                  width={132}
-                  height={132}
-                  className="hero-avatar"
-                  priority
-                />
-              </button>
+          <div className="hero-grid">
+            <div className="hero-identity">
+              <div className="hero-avatar-wrapper">
+                <button
+                  type="button"
+                  className="hero-avatar-button"
+                  onClick={() => setShowKnowledgeGraph(!showKnowledgeGraph)}
+                  aria-label="Toggle knowledge graph view"
+                  title="Explore my knowledge graph"
+                >
+                  <Image
+                    src={pp}
+                    alt="Aditya Mahakali"
+                    width={132}
+                    height={132}
+                    className="hero-avatar"
+                    priority
+                  />
+                </button>
+              </div>
+              <h1 className="hero-title">Aditya Mahakali</h1>
             </div>
-            <p className="hero-kicker">Senior AI/ML Engineer</p>
-            <h1 className="hero-title">Aditya Mahakali</h1>
-            <p className="hero-tagline">
-              Building prodcution AI systems with reliable backends and governed
-              AI.
-            </p>
-            <div className="mt-4 flex flex-wrap justify-center gap-2">
-              <span className="chip-accent">Generative AI</span>
-              <span className="chip-accent">Machine Learning</span>
-              <span className="chip-accent">AI Systems</span>
-              <span className="chip-accent">Enterprise Delivery</span>
-            </div>
-            <div className="hero-about">
-              <p>
-                Backend architecture, secure APIs, and retrieval-first grounded
-                GenAI experiences.
+            <div className="hero-statement">
+              <p className="hero-tagline">
+                <strong>Applied AI Architect</strong> building secure,
+                retrieval-first AI systems for the enterprise.
+              </p>
+              <p className="hero-focus-terms">
+                Generative AI <span aria-hidden="true">·</span> Machine Learning{" "}
+                <span aria-hidden="true">·</span> AI Systems{" "}
+                <span aria-hidden="true">·</span> Enterprise Delivery
               </p>
             </div>
           </div>
         </div>
       </header>
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         {!showKnowledgeGraph ? (
           <motion.div
             key="normal-content"
@@ -798,11 +770,10 @@ export default function Page() {
                   aria-labelledby="experience-heading"
                 >
                   <div className="section-header-row">
-                    <h2 id="experience-heading" className="section-title-left">
+                    <h2 id="experience-heading" className="section-heading">
                       Experience
                     </h2>
                     <div className="timeline-header-actions">
-                      <p className="section-tag">Timeline</p>
                       <button
                         type="button"
                         className="timeline-toggle"
@@ -832,78 +803,101 @@ export default function Page() {
                       return (
                         <article
                           key={journey.company}
-                          className="timeline-card"
+                          className="timeline-entry"
                         >
-                          <div className="timeline-head">
+                          <div className="timeline-rail">
                             <span className="timeline-icon">
                               <FaBriefcase aria-hidden="true" />
                             </span>
                             <div>
                               <h3 className="timeline-role">{journey.role}</h3>
                               <p className="timeline-company">
-                                {journey.company}
+                                {"companyUrl" in journey && journey.companyUrl ? (
+                                  <a
+                                    href={journey.companyUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {journey.company}
+                                  </a>
+                                ) : (
+                                  journey.company
+                                )}
                               </p>
                               <p className="timeline-period">
                                 {journey.period}
                               </p>
                             </div>
-                            <button
-                              type="button"
-                              className="timeline-toggle"
-                              onClick={() =>
-                                setExpandedCompanies((prev) => ({
-                                  ...prev,
-                                  [journey.company]: !expanded,
-                                }))
-                              }
-                              aria-expanded={expanded}
-                              aria-controls={`timeline-${journey.company}`}
-                            >
-                              {expanded ? "Show less" : "Show full timeline"}
-                            </button>
                           </div>
-                          <ol
-                            className="timeline-steps"
-                            id={`timeline-${journey.company}`}
-                          >
-                            {visibleStages.map((stage) => (
-                              <li key={stage.title} className="timeline-step">
-                                <p className="timeline-phase">{stage.phase}</p>
-                                <h4 className="timeline-title">
-                                  {stage.title}
-                                </h4>
-                                <p className="timeline-detail">
-                                  {stage.detail}
-                                </p>
-                                <div className="timeline-meta">
-                                  <span className="timeline-pill">
-                                    {stage.stack}
-                                  </span>
-                                  {"metric" in stage && stage.metric ? (
-                                    <span className="timeline-pill metric">
-                                      {stage.metric}
-                                    </span>
-                                  ) : null}
-                                </div>
-                              </li>
-                            ))}
-                          </ol>
-                          {!expanded && hiddenCount > 0 ? (
-                            <button
-                              type="button"
-                              className="timeline-more"
-                              onClick={() =>
-                                setExpandedCompanies((prev) => ({
-                                  ...prev,
-                                  [journey.company]: true,
-                                }))
-                              }
-                              aria-controls={`timeline-${journey.company}`}
-                              aria-expanded={expanded}
+                          <div className="timeline-body">
+                            <ol
+                              className="timeline-steps"
+                              id={`timeline-${journey.company}`}
                             >
-                              +{hiddenCount} more milestones
-                            </button>
-                          ) : null}
+                              {visibleStages.map((stage) => (
+                                <li key={stage.title} className="timeline-step">
+                                  <div className="timeline-step-head">
+                                    <span className="timeline-pill timeline-pill--phase">
+                                      {stage.phase}
+                                    </span>
+                                    {"date" in stage && stage.date ? (
+                                      <span className="timeline-step-date">
+                                        {stage.date}
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                  <h4 className="timeline-title">
+                                    {stage.title}
+                                  </h4>
+                                  <p className="timeline-detail">
+                                    {stage.detail}
+                                  </p>
+                                  <div className="timeline-meta">
+                                    <span className="timeline-pill">
+                                      {stage.stack}
+                                    </span>
+                                    {"metric" in stage && stage.metric ? (
+                                      <span className="timeline-pill metric">
+                                        {stage.metric}
+                                      </span>
+                                    ) : null}
+                                  </div>
+                                </li>
+                              ))}
+                            </ol>
+                            <div className="timeline-body-actions">
+                              {hiddenCount > 0 && !expanded ? (
+                                <button
+                                  type="button"
+                                  className="timeline-more"
+                                  onClick={() =>
+                                    setExpandedCompanies((prev) => ({
+                                      ...prev,
+                                      [journey.company]: true,
+                                    }))
+                                  }
+                                  aria-controls={`timeline-${journey.company}`}
+                                  aria-expanded={expanded}
+                                >
+                                  +{hiddenCount} more milestones
+                                </button>
+                              ) : null}
+                              <button
+                                type="button"
+                                className="timeline-toggle"
+                                onClick={() =>
+                                  setExpandedCompanies((prev) => ({
+                                    ...prev,
+                                    [journey.company]: !expanded,
+                                  }))
+                                }
+                                aria-expanded={expanded}
+                                aria-controls={`timeline-${journey.company}`}
+                              >
+                                {expanded ? "Show less" : "Show full timeline"}
+                              </button>
+                            </div>
+                          </div>
                         </article>
                       );
                     })}
@@ -911,76 +905,71 @@ export default function Page() {
                 </section>
 
                 <section
-                  className="opensource-card"
+                  className="opensource-band"
                   aria-labelledby="opensource-heading"
                 >
-                  <div className="opensource-top">
-                    <p className="opensource-kicker">Featured Open Source</p>
-                    <div className="opensource-grid">
-                      <div className="opensource-left">
-                        <h2
-                          id="opensource-heading"
-                          className="opensource-title font-veridex-script"
-                        >
-                          Veridex
-                        </h2>
-                        <p className="opensource-tagline">
-                          Modular, probabilistic, and research-grounded AI
-                          content detection.
-                        </p>
-                        <div className="mt-3 flex flex-wrap gap-2">
-                          {[
-                            "Python",
-                            "AI Detection",
-                            "Probabilistic",
-                            "Multi-modal",
-                          ].map((tag) => (
-                            <span
-                              key={`opensource-${tag}`}
-                              className="chip-muted"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <div className="opensource-actions">
-                          <a
-                            href="https://github.com/ADITYAMAHAKALI/veridex"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-secondary"
+                  <div className="opensource-grid">
+                    <div className="opensource-left">
+                      <h2
+                        id="opensource-heading"
+                        className="opensource-title font-veridex-script"
+                      >
+                        Veridex
+                      </h2>
+                      <p className="opensource-tagline">
+                        Modular, probabilistic, and research-grounded AI content
+                        detection.
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {[
+                          "Python",
+                          "AI Detection",
+                          "Probabilistic",
+                          "Multi-modal",
+                        ].map((tag) => (
+                          <span
+                            key={`opensource-${tag}`}
+                            className="chip-muted"
                           >
-                            <FaGithub aria-hidden="true" /> GitHub
-                          </a>
-                          <a
-                            href="https://adityamahakali.github.io/veridex/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="btn-secondary"
-                          >
-                            <FaBook aria-hidden="true" /> Docs
-                          </a>
-                        </div>
+                            {tag}
+                          </span>
+                        ))}
                       </div>
-                      <div
-                        className="opensource-right"
+                      <div className="opensource-actions">
+                        <a
+                          href="https://github.com/ADITYAMAHAKALI/veridex"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-secondary"
+                        >
+                          <FaGithub aria-hidden="true" /> GitHub
+                        </a>
+                        <a
+                          href="https://adityamahakali.github.io/veridex/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-secondary"
+                        >
+                          <FaBook aria-hidden="true" /> Docs
+                        </a>
+                      </div>
+                    </div>
+                    <div className="opensource-right">
+                      <ul
+                        className="opensource-features"
                         aria-label="Key features"
                       >
-                        <div className="opensource-feature">
-                          Detects AI-generated text, image, and audio.
-                        </div>
-                        <div className="opensource-feature">
+                        <li>Detects AI-generated text, image, and audio.</li>
+                        <li>
                           Uses confidence scores instead of binary output.
-                        </div>
-                        <div className="opensource-feature">
-                          Designed for research and production workflows.
-                        </div>
-                        <p className="opensource-desc">
-                          A production-ready library for detecting AI-generated
-                          content across text, image, and audio with confidence
-                          estimates and interpretable signals.
-                        </p>
-                      </div>
+                        </li>
+                        <li>Designed for research and production workflows.</li>
+                      </ul>
+                      <p className="opensource-desc">
+                        A production-ready library for detecting AI-generated
+                        content across text, image, and audio with confidence
+                        estimates and interpretable signals.
+                      </p>
                     </div>
                   </div>
                 </section>
@@ -989,19 +978,18 @@ export default function Page() {
                   className="project-showcase"
                   aria-labelledby="projects-heading"
                 >
-                  <div className="section-header-row">
-                    <h2 id="projects-heading" className="section-title-left">
-                      Featured Projects
-                    </h2>
-                    <p className="section-tag">Bento Spotlight</p>
-                  </div>
-                  <div className="project-grid">
+                  <h2 id="projects-heading" className="section-heading">
+                    Featured Projects
+                  </h2>
+                  <div className="project-list">
                     {projects.map((project) => (
-                      <details key={project.title} className="case-card">
+                      <details key={project.title} className="case-row">
                         <summary className="case-summary">
                           <div>
-                            <p className="project-tag">{project.tag}</p>
-                            <h3 className="case-title">{project.title}</h3>
+                            <div className="case-heading-row">
+                              <h3 className="case-title">{project.title}</h3>
+                              <span className="case-tag">{project.tag}</span>
+                            </div>
                             <p className="case-lede">{project.summary}</p>
                             <div
                               className="case-pill-row"
@@ -1093,12 +1081,9 @@ export default function Page() {
                   className="cert-section"
                   aria-labelledby="certs-heading"
                 >
-                  <div className="section-header-row">
-                    <h2 id="certs-heading" className="section-title-left">
-                      Certifications & Badges
-                    </h2>
-                    <p className="section-tag">Credly Portfolio</p>
-                  </div>
+                  <h2 id="certs-heading" className="section-heading">
+                    Certifications &amp; Badges
+                  </h2>
 
                   <details className="cert-accordion">
                     <summary className="cert-accordion-summary">
@@ -1128,16 +1113,18 @@ export default function Page() {
 
                       <div>
                         <h3 className="cert-grid-title">Badges</h3>
-                        <div className="cert-grid">
+                        <div className="cert-ledger">
                           {certs.map(([name, url], index) => (
                             <a
                               key={name}
                               href={url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="cert-item"
+                              className="cert-row"
                             >
-                              <span className="cert-index">#{index + 1}</span>
+                              <span className="cert-index">
+                                {String(index + 1).padStart(2, "0")}
+                              </span>
                               <span className="cert-name">{name}</span>
                               <span className="cert-link">
                                 View Badge{" "}
@@ -1156,7 +1143,7 @@ export default function Page() {
                   aria-label="Education and interests"
                 >
                   <section
-                    className="profile-card"
+                    className="profile-block"
                     aria-labelledby="education-heading"
                   >
                     <div className="profile-head">
@@ -1198,7 +1185,7 @@ export default function Page() {
                   </section>
 
                   <section
-                    className="profile-card"
+                    className="profile-block"
                     aria-labelledby="interests-heading"
                   >
                     <div className="profile-head">
@@ -1210,121 +1197,102 @@ export default function Page() {
                         end-to-end.
                       </p>
                     </div>
-                    <div className="interest-grid" aria-label="Interest tiles">
+                    <div className="interest-list" aria-label="Interests">
                       <a
-                        className="interest-tile"
+                        className="interest-row"
                         href="https://www.chess.com/member/adityamahakali"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
                         <FaChess aria-hidden="true" className="interest-icon" />
-                        <p className="interest-label">Chess</p>
-                        <p className="interest-desc">
-                          Strategy, calculation, and calm decision-making.
-                        </p>
+                        <div>
+                          <p className="interest-label">Chess</p>
+                          <p className="interest-desc">
+                            Strategy, calculation, and calm decision-making.
+                          </p>
+                        </div>
                       </a>
-                      <div className="interest-tile">
+                      <div className="interest-row">
                         <FaChalkboardTeacher
                           aria-hidden="true"
                           className="interest-icon"
                         />
-                        <p className="interest-label">Teaching</p>
-                        <p className="interest-desc">
-                          Explaining complex systems with clarity and structure.
-                        </p>
+                        <div>
+                          <p className="interest-label">Teaching</p>
+                          <p className="interest-desc">
+                            Explaining complex systems with clarity and
+                            structure.
+                          </p>
+                        </div>
                       </div>
-                      <div className="interest-tile">
+                      <div className="interest-row">
                         <FaLaptopCode
                           aria-hidden="true"
                           className="interest-icon"
                         />
-                        <p className="interest-label">Coding</p>
-                        <p className="interest-desc">
-                          Shipping end-to-end builds: API, retrieval, and UI.
-                        </p>
+                        <div>
+                          <p className="interest-label">Coding</p>
+                          <p className="interest-desc">
+                            Shipping end-to-end builds: API, retrieval, and UI.
+                          </p>
+                        </div>
                       </div>
                     </div>
-                    <ul className="interest-notes" aria-label="Interest notes">
-                      <li>
-                        I enjoy mentoring, reviewing designs, and improving team
-                        delivery quality.
-                      </li>
-                      <li>
-                        I prefer systems that are observable, secure-by-default,
-                        and built for real users.
-                      </li>
-                      <li>
-                        I like turning research ideas into working products with
-                        clear metrics.
-                      </li>
-                    </ul>
+            
                   </section>
                 </section>
-                <br />
+
                 <section
-                  className="contact-card"
+                  className="contact-section"
                   aria-labelledby="contact-heading"
                 >
-                  <div className="profile-head">
-                    <h2 id="contact-heading" className="profile-title">
-                      Contact
-                    </h2>
-                    <p className="profile-subtitle">
-                      Open to collaborations, product builds, and AI engineering
-                      roles.
-                    </p>
-                  </div>
-                  <div className="contact-grid">
+                  <h2 id="contact-heading" className="section-heading">
+                    Contact
+                  </h2>
+                  <p className="contact-intro">
+                    Open to collaborations and AI engineering roles.
+                  </p>
+                  <div className="contact-rows">
                     <a
-                      className="contact-item"
-                      href="mailto:adityamahakali@gmail.com"
-                    >
-                      <FaEnvelope aria-hidden="true" />
-                      <div>
-                        <p className="contact-label">Email</p>
-                        <p className="contact-value">
-                          adityamahakali@gmail.com
-                        </p>
-                      </div>
-                    </a>
-                    <a
-                      className="contact-item"
+                      className="contact-row"
                       href="https://www.linkedin.com/in/aditya-mahakali-b81758168/"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <FaLinkedin aria-hidden="true" />
-                      <div>
-                        <p className="contact-label">LinkedIn</p>
-                        <p className="contact-value">
-                          aditya-mahakali-b81758168
-                        </p>
-                      </div>
+                      <span className="contact-row-label">LinkedIn</span>
+                      <span className="contact-row-value">
+                        aditya-mahakali-b81758168
+                      </span>
                     </a>
                     <a
-                      className="contact-item"
+                      className="contact-row"
                       href="https://github.com/ADITYAMAHAKALI/"
                       target="_blank"
                       rel="noopener noreferrer"
                     >
                       <FaGithub aria-hidden="true" />
-                      <div>
-                        <p className="contact-label">GitHub</p>
-                        <p className="contact-value">@ADITYAMAHAKALI</p>
-                      </div>
+                      <span className="contact-row-label">GitHub</span>
+                      <span className="contact-row-value">@ADITYAMAHAKALI</span>
                     </a>
                     <div
-                      className="contact-item"
+                      className="contact-row"
                       role="note"
                       aria-label="Location"
                     >
                       <FaHome aria-hidden="true" />
-                      <div>
-                        <p className="contact-label">Location</p>
-                        <p className="contact-value">Bangalore, India</p>
-                      </div>
+                      <span className="contact-row-label">Location</span>
+                      <span className="contact-row-value">
+                        Bangalore, India
+                      </span>
                     </div>
                   </div>
+                  <a
+                    className="contact-email"
+                    href="mailto:adityamahakali@gmail.com"
+                  >
+                    <FaEnvelope aria-hidden="true" /> adityamahakali@gmail.com
+                  </a>
                 </section>
               </section>
             </main>
@@ -1370,8 +1338,6 @@ export default function Page() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      <BottomDock items={dockItems} />
     </div>
   );
 }
