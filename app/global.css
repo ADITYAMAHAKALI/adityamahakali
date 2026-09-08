@@ -433,6 +433,15 @@ body {
   letter-spacing: 0.01em;
 }
 
+.hero-availability {
+  color: var(--text-soft);
+  font-size: 0.95rem;
+}
+
+.hero-cta-row {
+  margin-top: 0.3rem;
+}
+
 .hero-avatar {
   border-radius: 999px;
   border: 3px solid var(--text-soft);
@@ -725,33 +734,6 @@ body {
   grid-template-columns: 1fr;
   gap: 1.5rem;
 }
-.cert-list {
-  padding: 0.25rem 0;
-}
-.cert-list-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 1rem;
-  font-weight: 700;
-}
-.cert-provider {
-  margin-bottom: 0.75rem;
-}
-.cert-provider-name {
-  margin: 0 0 0.25rem 0;
-  font-weight: 600;
-}
-.cert-provider ul {
-  margin: 0;
-  padding-left: 1.2rem;
-}
-
-.cert-grid-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-soft);
-}
-
 .cert-ledger {
   display: grid;
 }
@@ -1573,6 +1555,20 @@ body {
 
 .skill-strip {
   overflow: hidden;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    black 5%,
+    black 95%,
+    transparent
+  );
 }
 
 .skill-strip-track {

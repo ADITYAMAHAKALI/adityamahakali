@@ -1,0 +1,25 @@
+# Aditya Mahakali
+
+> Applied AI Architect building production AI systems: RAG, agentic pipelines, and enterprise ML/GenAI. Open to both full-time roles and consulting engagements.
+
+Currently AI Architect at Aintropy (aintropy.ai), building an agentic, video-first cognitive pipeline. Previously AI/ML Engineer at IBM (Aug 2023-Apr 2026), where he delivered 12+ enterprise GenAI systems including a conversational RAG banking assistant (85% first-call resolution), RAG APIs over 100k+ documents, secure NL2SQL microservices, and Neo4j knowledge-graph RAG. Co-authored the SEARCHD retrieval-evaluation paper (IEEE, 2024).
+
+## Contact
+
+- Email: adityamahakali@gmail.com
+- LinkedIn: https://www.linkedin.com/in/aditya-mahakali-b81758168/
+- GitHub: https://github.com/ADITYAMAHAKALI
+
+## Pages
+
+- [Home](https://www.adityamahakali.in/): experience timeline, projects, skills, certifications, contact
+- [Blog](https://www.adityamahakali.in/blog): long-form notes on applied AI, written for business decision-makers, not just engineers
+
+## Open Source
+
+- [Veridex](https://github.com/ADITYAMAHAKALI/veridex): a modular, probabilistic AI-content-detection library covering text, image, and audio, with confidence estimates instead of binary classification. Docs: https://adityamahakali.github.io/veridex/
+
+## Skills
+
+ML/GenAI: machine learning, deep learning, generative AI, NLP, computer vision, AI search, retrieval (RAG), agents, knowledge graphs, embeddings, re-ranking.
+Full-stack: Spring Boot, Django, FastAPI, Flask, Node.js, SQL/NoSQL, GraphQL, Elasticsearch, Linux, Git, Docker, OpenShift, Ansible.

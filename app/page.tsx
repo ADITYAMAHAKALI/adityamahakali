@@ -66,11 +66,6 @@ const mlStrip: Skill[] = [
   { name: "Re-ranking", icon: FaSearch },
 ];
 
-const certifications: Record<string, string[]> = {
-  Coursera: ["Intro To Python", "Algorithmic ToolBox"],
-  Kaggle: ["Intro To ML", "Intro to Deep Learning", "Intro to Computer Vision"],
-};
-
 const fullStackStrip: Skill[] = [
   { name: "Spring Boot", icon: SiSpringboot },
   { name: "Django", icon: SiDjango },
@@ -741,6 +736,14 @@ export default function Page() {
                 <span aria-hidden="true">·</span> AI Systems{" "}
                 <span aria-hidden="true">·</span> Enterprise Delivery
               </p>
+              <p className="hero-availability">
+                Open to full-time roles and AI consulting engagements.
+              </p>
+              <div className="hero-cta-row">
+                <a href="#contact" className="btn-primary">
+                  Get in Touch
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -1083,12 +1086,12 @@ export default function Page() {
                   aria-labelledby="certs-heading"
                 >
                   <h2 id="certs-heading" className="section-heading">
-                    Certifications &amp; Badges
+                    Certifications
                   </h2>
 
                   <details className="cert-accordion">
                     <summary className="cert-accordion-summary">
-                      <span>Show Certifications & Badges</span>
+                      <span>Show Certifications</span>
                       <FaChevronDown
                         className="cert-accordion-icon"
                         aria-hidden="true"
@@ -1096,24 +1099,7 @@ export default function Page() {
                     </summary>
 
                     <div className="cert-accordion-body">
-                      <div className="cert-list">
-                        <h3 className="cert-list-title">Certifications</h3>
-                        {Object.entries(certifications).map(
-                          ([provider, items]) => (
-                            <div key={provider} className="cert-provider">
-                              <h4 className="cert-provider-name">{provider}</h4>
-                              <ul>
-                                {items.map((it) => (
-                                  <li key={it}>{it}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          ),
-                        )}
-                      </div>
-
                       <div>
-                        <h3 className="cert-grid-title">Badges</h3>
                         <div className="cert-ledger">
                           {certs.map(([name, url], index) => (
                             <a
@@ -1256,6 +1242,7 @@ export default function Page() {
                 </section>
 
                 <section
+                  id="contact"
                   className="contact-section"
                   aria-labelledby="contact-heading"
                 >

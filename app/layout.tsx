@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     template: "%s | Aditya Mahakali",
   },
   description:
-    "Independent Consulting AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Expert in building production AI systems with LLMs, embeddings, and retrieval engineering. Portfolio showcasing real-world AI/ML projects.",
+    "Applied AI Architect specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions, open to consulting engagements alongside full-time work. Expert in building production AI systems with LLMs, embeddings, and retrieval engineering. Portfolio showcasing real-world AI/ML projects.",
   icons: {
     icon: [
       { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Aditya Mahakali - AI Engineer | ML & GenAI Specialist",
     description:
-      "Independent Consulting AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions. Building production AI systems with LLMs and retrieval engineering.",
+      "Applied AI Architect specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions, open to consulting engagements. Building production AI systems with LLMs and retrieval engineering.",
     images: [`${baseUrl}/og-image.png`],
     creator: "@adityamahakali",
   },
@@ -165,20 +165,26 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const personId = `${baseUrl}/#person`;
+  const websiteId = `${baseUrl}/#website`;
+  const profilePageId = `${baseUrl}/#profilepage`;
+  const serviceId = `${baseUrl}/#service`;
+
   const personSchema = {
     "@context": "https://schema.org",
     "@type": "Person",
+    "@id": personId,
     name: "Aditya Mahakali",
-    jobTitle: "AI Engineer",
+    jobTitle: "AI Architect",
     description:
-      "AI Engineer specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions",
+      "Applied AI Architect specializing in Generative AI, RAG systems, NL2SQL, and enterprise ML solutions, open to consulting engagements",
     url: baseUrl,
     image: `${baseUrl}/dp.jpeg`,
     email: "adityamahakali@gmail.com",
     worksFor: {
       "@type": "Organization",
-      name: "Independent Consultant",
-      url: baseUrl,
+      name: "Aintropy",
+      url: "https://aintropy.ai",
     },
     alumniOf: {
       "@type": "EducationalOrganization",
@@ -204,20 +210,36 @@ export default function RootLayout({
     ],
   };
 
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": websiteId,
+    url: baseUrl,
+    name: "Aditya Mahakali - AI Architect Portfolio",
+    publisher: { "@id": personId },
+  };
+
+  const profilePageSchema = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": profilePageId,
+    url: baseUrl,
+    isPartOf: { "@id": websiteId },
+    mainEntity: { "@id": personId },
+  };
+
   const professionalServiceSchema = {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
-    name: "AI/ML Engineering Services",
+    "@id": serviceId,
+    name: "AI/ML Engineering & Consulting Services",
     description:
-      "Expert AI Engineering services specializing in Generative AI, RAG systems, NL2SQL, embeddings, and enterprise ML solutions",
-    provider: {
-      "@type": "Person",
-      name: "Aditya Mahakali",
-      jobTitle: "AI Engineer",
-    },
+      "Applied AI Architect available for consulting engagements: Generative AI, RAG systems, NL2SQL, embeddings, and enterprise ML solutions",
+    provider: { "@id": personId },
     areaServed: "Worldwide",
     serviceType: [
       "AI Engineering",
+      "AI Architecture Consulting",
       "Machine Learning Engineering",
       "Generative AI Development",
       "RAG System Development",
@@ -241,6 +263,16 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(profilePageSchema),
+          }}
         />
         <script
           type="application/ld+json"
